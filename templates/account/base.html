@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quran | {% block title %}{% endblock %}</title>
+
+    <link href="{% static 'staticfull/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'staticfull/font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+    <link href="{% static 'staticfull/css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'staticfull/css/style.css' %}" rel="stylesheet">
+
+    <script src="{% static 'staticfull/js/jquery-2.1.1.js' %}"></script>  {#otherwise alerts cant be closed#}
+    <script src="{% static 'staticfull/js/bootstrap.min.js' %}"></script>
+
+    {% block scripts %}
+    {% endblock %}
+
+</head>
+
+{% load bootstrap3 %}
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <div>
+            <h1 class="logo-name" style="font-size: 22em;">ق</h1>
+        </div>
+
+        {% block header %}
+        {% endblock %}
+
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    {% bootstrap_alert message %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block body %}
+        {% endblock %}
+
+        {% block footer%}
+            <p class="m-t">
+                <small> Quran &copy; 2016</small>
+            </p>
+        {% endblock %}
+
+    </div>
+</div>
+
+</body>
+</html>

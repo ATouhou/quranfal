@@ -1,0 +1,13 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block title %}Account Inactive{% endblock %}
+
+{% block header %}
+<h3>Account Inactive</h3>
+
+{% bootstrap_alert 'This account is inactive' %}
+
+{% endblock %}
