@@ -10,6 +10,10 @@ INSTALLED_APPS += [
     'allauth.socialaccount.providers.google',
 
     'bootstrap3',
+
+    'quran',
+    'quranfal',
+
 ]
 
 MIDDLEWARE_CLASSES += []
