@@ -1,0 +1,63 @@
+{% extends 'quran/base.html' %}
+
+{% block body %}
+
+    {% load quran %}
+
+    {% if display_word_meaning %}
+        <script> var display_word_meaning = true </script>
+    {% endif %}
+
+    {% if learning %}
+        <script> var learning = true </script>
+        <script> var known_words = {{ known_words | safe }}</script>
+    {% endif %}
+
+    <div class="wire_frame page_container">
+        <div class="outer_frame">
+            <div class="wire_frame">
+                <div class="inner_frame">
+                    <div class="wire_frame" style="padding: 3px;">
+                        <div class="page wire_frame" style="padding: 10px;">
+                            {% for aya in ayas %}
+
+                                {% if aya.bismillah %}
+                                    <div class="header">سورة {{ aya.sura.text }}</div>
+                                    <div class="bismillah">
+                                        {{ aya.bismillah }}
+                                    </div>
+                                {% endif %}
+
+                                <span>
+                                <span class="aya" id="{{ aya.aya_id }}" data-sura="{{ aya.sura.number }}" data-aya="{{ aya.number }}"
+                                      data-learning="{{ aya.userayas.all.0.list_id }}">
+                                    {{ aya.text }}
+                                </span>
+
+                                <span class="key" title="{{ aya.translations.all.0.text }}">
+                                    {% if display_word_meaning or learning %}
+                                        <div class="word_wrapper">
+                                    {% endif %}
+
+                                    <a class="aya_numerals" href="{{ aya.get_absolute_url }}">﴿{{ aya.number|arabic_numerals }}﴾</a>
+
+                                    {% if display_word_meaning or learning %}
+                                        <br>
+                                        <div class="word_meaning" style="visibility:hidden;">.</div> <!-- just for spacing -->
+                                        </div>
+                                    {% endif %}
+                                </span>
+
+                                {{ aya.word_meanings_json|safe }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "quran/aya_script.html" %}
+
+{% endblock %}

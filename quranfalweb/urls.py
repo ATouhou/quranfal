@@ -13,12 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
+
+from quranfal.views import LearningPageView, LearningMarkAya, LearningMarkWord
+
+
 
 urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
 
     url(r'^admin/', admin.site.urls),
+
+    url(r'^quran/page/(?P<page_number>\d+)/$', LearningPageView.as_view(), name='quran_page'),
+    url(r'^quran/learning/(?P<sura_number>\d+)/(?P<aya_number>\d+)/$',
+        login_required(LearningMarkAya.as_view()), name='learning_mark_aya'),
+    url(r'^quran/learning/(?P<sura_number>\d+)/(?P<aya_number>\d+)/(?P<word_number>\d+)/$',
+        login_required(LearningMarkWord.as_view()), name='learning_mark_word'),
+
     url(r'^quran/', include('quran.urls')),
 ]
