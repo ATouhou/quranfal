@@ -4,13 +4,13 @@
 
     {% load quran %}
 
-    {% if display_word_meaning %}
-        <script> var display_word_meaning = true </script>
+    {% if display_word_meanings %}
+        <script> display_word_meanings = true </script>
     {% endif %}
 
     {% if learning %}
         <script> var learning = true </script>
-        <script> var known_words = {{ known_words | safe }}</script>
+        <script> var user_words = {{ user_words | safe }}</script>
     {% endif %}
 
     <div class="wire_frame page_container">
@@ -35,13 +35,13 @@
                                 </span>
 
                                 <span class="key" title="{{ aya.translations.all.0.text }}">
-                                    {% if display_word_meaning or learning %}
+                                    {% if display_word_meanings or learning %}
                                         <div class="word_wrapper">
                                     {% endif %}
 
                                     <a class="aya_numerals" href="{{ aya.get_absolute_url }}">﴿{{ aya.number|arabic_numerals }}﴾</a>
 
-                                    {% if display_word_meaning or learning %}
+                                    {% if display_word_meanings or learning %}
                                         <br>
                                         <div class="word_meaning" style="visibility:hidden;">.</div> <!-- just for spacing -->
                                         </div>

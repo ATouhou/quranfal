@@ -1,0 +1,12 @@
+
+div.word_wrapper[data-list="1"] div.word_meaning {
+    background-color: rgba(44, 237, 141, 0.56);
+}
+
+div.word_wrapper[data-list="2"] div.word_meaning {
+    background-color: rgba(222, 160, 64, 0.67);
+}
+
+div.word_wrapper[data-list="3"] div.word_meaning {
+    background-color: rgba(79, 125, 137, 0.58);
+}

@@ -3,8 +3,8 @@ from django.db.models import Prefetch
 from django.http import HttpResponse
 from django.views.generic import TemplateView, View
 from quran.models import Page, Aya, Word, DistinctWord
-from quran.views import prefetch_aya_translations
-from quranfal.models import UserAya, UserWord
+from quran.views import prefetch_aya_translations, get_setting
+from quranfal.models import UserAya, UserWord, List
 
 
 class LearningPageView(TemplateView):
@@ -15,7 +15,7 @@ class LearningPageView(TemplateView):
         page = Page.objects.get(number=page_number)
 
         context['learning'] = False
-        known_words = []
+        user_words = []
         if self.request.user.is_authenticated():
             context['learning'] = self.request.session['learning']
             user = self.request.user
@@ -25,17 +25,18 @@ class LearningPageView(TemplateView):
                                   Prefetch('userayas', queryset=list_qs)) # filtering on membership table so prefetch membership table!
 
             known_distinct_words=DistinctWord.objects.filter(userwords__user=user)
-            known_words = Word.objects.filter(
+            user_words = Word.objects.filter(
                 aya_id__gte=page.aya_begin_id,
                 aya_id__lte=page.aya_end_id,
-                distinct_word__in=known_distinct_words).values_list('utext', flat=True)
+                distinct_word__in=known_distinct_words).values_list('aya__sura_id', 'aya__number', 'number', 'distinct_word__userwords__list_id')
+            user_words = [list(word) for word in user_words]
         else:
             ayas = Aya.objects.filter(id__gte=page.aya_begin_id, id__lte=page.aya_end_id)\
                 .prefetch_related(prefetch_aya_translations(self.request))
 
         context['ayas'] = ayas
-        context['display_word_meaning'] = self.request.session['display_word_meaning']
-        context['known_words'] = '["' + '", "'.join(known_words) + '"]'
+        context['display_word_meanings'] = get_setting(self.request, 'display_word_meanings')
+        context['user_words'] = json.dumps(user_words)
         return context
 
 
@@ -50,20 +51,23 @@ class LearningMarkAya(View):
         return HttpResponse('User is created.<script>closeFancyBox(1000);location.reload();toastr.info("Are you the 6 fingered man?");</script>',
                                 content_type='text/html')
 
-list_length = 2
+
 class LearningMarkWord(View):
     def post(self, request, *args, **kwargs):
         user = self.request.user
         sura_number = request.POST.get('sura')
         aya_number = request.POST.get('aya')
         word_number = request.POST.get('word')
-        word = Word.objects.filter(sura_id=sura_number, aya_id=aya_number, number=word_number).first()
+        word = Word.objects.filter(sura_id=sura_number, aya__number=aya_number, number=word_number).first()
         user_word = word.distinct_word.userwords.filter(user=user).first()
         if user_word:
-            user_word.list_id = (user_word.list_id + 1) % list_length
+            new_list = List.objects.filter(id=user_word.list_id+1).first()
+            if not new_list:
+                new_list = List.objects.first()
+            user_word.list = new_list
         else:
-            user_word = UserWord(user=user, distinct_word=word.distinct_word, list_id=1)
-            user_word.save()
+            user_word = UserWord(user=user, distinct_word=word.distinct_word, list=List.objects.first())
+        user_word.save()
 
         message = {
             'message': 'Word is added!',

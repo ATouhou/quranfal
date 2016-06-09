@@ -1,6 +1,14 @@
 <script>
     $(document).ready(function () {
 
+        user_words.forEach(function(word_defn){
+            var sura=word_defn[0]
+            var aya=word_defn[1]
+            var word=word_defn[2]
+            var list=word_defn[3]
+            $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="'+ word +'"]').attr('data-list', list)
+        })
+
         if (learning)
             $('div.word_meaning').on('click', function (event) {
 
@@ -10,11 +18,6 @@
                 var aya = div.parent().parent().attr('data-aya')
 
                 console.log(sura, aya, word)
-
-{#                window.parent.location = '?'#}
-{#                        + 'sura=' + sura + '&'#}
-{#                        + 'aya=' + aya + '&'#}
-{#                        + 'word=' + word#}
 
                 $.ajax({
                     type: 'POST',
@@ -26,12 +29,14 @@
                     },
                     success: function (message) {
                         message = JSON.parse(message)
-                        alert(message.message)
-                        console.log(message)
+{#                        alert(message.message)#}
+                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="'+ word +'"]').attr('data-list', message.list)
+                        console.log('New list: ' + message.list)
                     },
                     error: function (message) {
                         message = JSON.parse(message)
                         alert(message.message)
+                        console.log(message)
                     }
                 })
             })
