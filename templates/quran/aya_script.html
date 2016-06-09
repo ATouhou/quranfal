@@ -41,24 +41,4 @@
 
             aya.innerHTML = new_html
         })
-
-
-        $(document).ready(function(){
-            if (learning)
-                $('div.word_meaning').on('click', function(event){
-
-                    var div = $(event.target)
-                    var word = div.parent().attr('data-word')
-                    var sura = div.parent().parent().attr('data-sura')
-                    var aya = div.parent().parent().attr('data-aya')
-
-                    console.log(sura, aya, word)
-
-                    window.parent.location = '?'
-                        + 'sura=' + sura + '&'
-                        + 'aya=' + aya + '&'
-                        + 'word=' + word
-                })
-        })
-
     </script>

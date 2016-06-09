@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -17,7 +18,7 @@ class List(models.Model):
 class UserSubscription(models.Model):
     user = models.ForeignKey(User)
     list = models.ForeignKey(List)
-    date = models.DateField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True, auto_now_add=True)
 
     class Meta:
         abstract=True
@@ -28,4 +29,4 @@ class UserAya(UserSubscription):
 
 
 class UserWord(UserSubscription):
-    word = models.ForeignKey(DistinctWord, related_name='userwords')
+    distinct_word = models.ForeignKey(DistinctWord, related_name='userwords')

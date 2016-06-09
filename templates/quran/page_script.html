@@ -1,0 +1,74 @@
+<script>
+    $(document).ready(function () {
+
+        if (learning)
+            $('div.word_meaning').on('click', function (event) {
+
+                var div = $(event.target)
+                var word = div.parent().attr('data-word')
+                var sura = div.parent().parent().attr('data-sura')
+                var aya = div.parent().parent().attr('data-aya')
+
+                console.log(sura, aya, word)
+
+{#                window.parent.location = '?'#}
+{#                        + 'sura=' + sura + '&'#}
+{#                        + 'aya=' + aya + '&'#}
+{#                        + 'word=' + word#}
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://127.0.0.1:8080/quran/learning/word/',
+                    data: {
+                        sura: sura,
+                        aya: aya,
+                        word: word
+                    },
+                    success: function (message) {
+                        message = JSON.parse(message)
+                        alert(message.message)
+                        console.log(message)
+                    },
+                    error: function (message) {
+                        message = JSON.parse(message)
+                        alert(message.message)
+                    }
+                })
+            })
+
+        // CSRF code
+        function getCookie(name) {
+            var cookieValue = null
+            var i = 0
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';')
+                for (i; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i])
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+                        break
+                    }
+                }
+            }
+            return cookieValue
+        }
+
+        var csrftoken = getCookie('csrftoken')
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                }
+            }
+        })
+
+    })
+</script>

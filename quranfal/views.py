@@ -1,9 +1,9 @@
+import json
 from django.db.models import Prefetch
 from django.http import HttpResponse
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from quran.models import Page, Aya, Word, DistinctWord
 from quran.views import prefetch_aya_translations
-
 from quranfal.models import UserAya, UserWord
 
 
@@ -35,28 +35,40 @@ class LearningPageView(TemplateView):
 
         context['ayas'] = ayas
         context['display_word_meaning'] = self.request.session['display_word_meaning']
-        context['known_words'] = '[' + '", "'.join(known_words) + ']'
+        context['known_words'] = '["' + '", "'.join(known_words) + '"]'
         return context
 
 
-class LearningMarkAya(TemplateView):
-    def get_context_data(self, sura_number, aya_number, **kwargs):
-        context = super(LearningMarkAya, self).get_context_data(**kwargs)
+class LearningMarkAya(View):
+    def post(self, request, *args, **kwargs):
         user = self.request.user
+        sura_number = request.POST.get('sura')
+        aya_number = request.POST.get('aya')
         aya=Aya.objects.filter(sura_id=sura_number, number=aya_number).first()
         user_aya=aya.userayas.filter(user=user).first()
         user_aya.list_id += 1
         return HttpResponse('User is created.<script>closeFancyBox(1000);location.reload();toastr.info("Are you the 6 fingered man?");</script>',
                                 content_type='text/html')
 
-
-class LearningMarkWord(TemplateView):
-    def get_context_data(self, sura_number, aya_number, word_number, **kwargs):
-        context = super(LearningMarkWord, self).get_context_data(**kwargs)
+list_length = 2
+class LearningMarkWord(View):
+    def post(self, request, *args, **kwargs):
         user = self.request.user
-        word = Word.objects.filter(sura_id=sura_number, aya_number=aya_number, number=word_number).first()
-        user_word = word.userwords.filter(user=user).first()
-        user_word.list_id += 1
-        return HttpResponse('User is created.<script>closeFancyBox(1000);location.reload();toastr.info("Are you the 6 fingered man?");</script>',
-                                content_type='text/html')
+        sura_number = request.POST.get('sura')
+        aya_number = request.POST.get('aya')
+        word_number = request.POST.get('word')
+        word = Word.objects.filter(sura_id=sura_number, aya_id=aya_number, number=word_number).first()
+        user_word = word.distinct_word.userwords.filter(user=user).first()
+        if user_word:
+            user_word.list_id = (user_word.list_id + 1) % list_length
+        else:
+            user_word = UserWord(user=user, distinct_word=word.distinct_word, list_id=1)
+            user_word.save()
+
+        message = {
+            'message': 'Word is added!',
+            'list': user_word.list_id,
+            'script': 'rr',
+        }
+        return HttpResponse(json.dumps(message), content_type='text/html')
 

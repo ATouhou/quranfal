@@ -28,10 +28,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^quran/page/(?P<page_number>\d+)/$', LearningPageView.as_view(), name='quran_page'),
-    url(r'^quran/learning/(?P<sura_number>\d+)/(?P<aya_number>\d+)/$',
-        login_required(LearningMarkAya.as_view()), name='learning_mark_aya'),
-    url(r'^quran/learning/(?P<sura_number>\d+)/(?P<aya_number>\d+)/(?P<word_number>\d+)/$',
-        login_required(LearningMarkWord.as_view()), name='learning_mark_word'),
+    url(r'^quran/learning/aya/$', login_required(LearningMarkAya.as_view()), name='learning_mark_aya'),
+    url(r'^quran/learning/word/$', login_required(LearningMarkWord.as_view()), name='learning_mark_word'),
 
     url(r'^quran/', include('quran.urls')),
 ]
