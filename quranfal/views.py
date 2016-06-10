@@ -56,20 +56,18 @@ class LearningMarkAya(View):
 TOTAL_WORD_COUNT=77429
 
 class LearningMarkWord(View):
-    insession=0
-    def get_word_stats (self, user_word):
+    def get_list_stats (self, list_id):
         if 'stats' not in self.request.session:
             self.request.session['stats'] = {}
         stats = self.request.session['stats']
-        index = str(user_word.list_id)
+        index = str(list_id)
         if index not in stats:
-            self.insession += 1
             stats[index] = {
                 'distinct_word_count': UserWord.objects
-                    .filter(user=self.request.user, list_id=user_word.list_id)
+                    .filter(user=self.request.user, list_id=list_id)
                     .count(),
                 'word_count': UserWord.objects
-                    .filter(user=self.request.user, list_id=user_word.list_id)
+                    .filter(user=self.request.user, list_id=list_id)
                     .aggregate(sum=Coalesce(Sum('distinct_word__count'), 0))['sum'],
             }
         return stats[index]
@@ -78,31 +76,38 @@ class LearningMarkWord(View):
         sura_number = request.POST.get('sura')
         aya_number = request.POST.get('aya')
         word_number = request.POST.get('word')
+        list_id = request.POST.get('list')
         word = Word.objects.filter(sura_id=sura_number, aya__number=aya_number, number=word_number).first()
         user_word = word.distinct_word.userwords.filter(user=self.request.user).first()
+        deleted=False
         if user_word:
-            old_stats = self.get_word_stats(user_word)
+            old_stats = self.get_list_stats(user_word.list_id)
             old_stats['distinct_word_count'] -= 1
             old_stats['word_count'] -= word.distinct_word.count
 
-            new_list = List.objects.filter(id=user_word.list_id + 1).first()
-            if not new_list:
-                new_list = List.objects.first()
-            user_word.list = new_list # update
+            if user_word.list_id != int(list_id):
+                user_word.list_id = list_id # update
+            else:
+                user_word.delete()
+                deleted=True
         else:
-            user_word = UserWord(user=request.user, distinct_word=word.distinct_word, list=List.objects.first())
+            user_word = UserWord(user=request.user, distinct_word=word.distinct_word, list_id=list_id)
 
-        new_stats = self.get_word_stats(user_word)
-        new_stats['distinct_word_count'] += 1
-        new_stats['word_count'] += word.distinct_word.count
+        if deleted: # not deleted
+            msg = 'Word %s is deleted from the list' % word.utext
+        else:
+            new_stats = self.get_list_stats(list_id)
+            new_stats['distinct_word_count'] += 1
+            new_stats['word_count'] += word.distinct_word.count
 
-        user_word.save()
+            user_word.save()
+
+
+            msg = 'Word %s is %d times in Quran!\nThere are %d words in the list (%.2f%% of the Quran)' % \
+                  (word.utext, word.distinct_word.count, new_stats['distinct_word_count'], new_stats['word_count']/TOTAL_WORD_COUNT)
 
         message = {
-            'message': 'Word %s is %d times in Quran!\nThere are %d words in the list (%.2f%% of the Quran)' %
-                       (word.utext, word.distinct_word.count, new_stats['distinct_word_count'], new_stats['word_count']/TOTAL_WORD_COUNT),
-            # 'message': 'In session: %d' % self.insession,
-            'list': user_word.list_id,
-            'script': 'rr',
+            'message': msg,
+            'list': 0 if deleted else user_word.list_id
         }
         return HttpResponse(json.dumps(message), content_type='text/html')

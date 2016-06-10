@@ -13,11 +13,10 @@
             $('div.word_meaning').on('click', function (event) {
 
                 var div = $(event.target)
-                var word = div.parent().attr('data-word')
-                var sura = div.parent().parent().attr('data-sura')
-                var aya = div.parent().parent().attr('data-aya')
-
-                console.log(sura, aya, word)
+                var word = div.parent().parent().attr('data-word')
+                var sura = div.parent().parent().parent().attr('data-sura')
+                var aya = div.parent().parent().parent().attr('data-aya')
+                var utext = div.parent().prev().prev().html()
 
                 $.ajax({
                     type: 'POST',
@@ -25,13 +24,17 @@
                     data: {
                         sura: sura,
                         aya: aya,
-                        word: word
+                        word: word,
+                        list: div.hasClass('known') ? 1 : 2
                     },
                     success: function (message) {
                         message = JSON.parse(message)
                         toastr['info'](message.message)
-                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)
-                        console.log('New list: ' + message.list)
+{#                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)#}
+                        $('a.word').each(function (index) {
+                            if ($(this).html() == utext)
+                                $(this).parent().attr('data-list', message.list)
+                            })
                     },
                     error: function (message) {
                         message = JSON.parse(message)

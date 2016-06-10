@@ -10,3 +10,24 @@ div.word_wrapper[data-list="2"] div.word_meaning {
 div.word_wrapper[data-list="3"] div.word_meaning {
     background-color: rgba(79, 125, 137, 0.58);
 }
+
+div.word_meaning div.button {
+    display:inline-block;
+    height:100%;
+}
+
+div.half {
+    width:50%;
+}
+
+div.full {
+    width:100%;
+}
+
+div.word_meaning div.known:hover {
+    background-color: rgba(105, 215, 40, 0.22);
+}
+
+div.word_meaning div.study:hover {
+    background-color: rgba(222, 160, 64, 0.67);
+}
