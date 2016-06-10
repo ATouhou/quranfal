@@ -1,12 +1,12 @@
 <script>
     $(document).ready(function () {
 
-        user_words.forEach(function(word_defn){
-            var sura=word_defn[0]
-            var aya=word_defn[1]
-            var word=word_defn[2]
-            var list=word_defn[3]
-            $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="'+ word +'"]').attr('data-list', list)
+        user_words.forEach(function (word_defn) {
+            var sura = word_defn[0]
+            var aya = word_defn[1]
+            var word = word_defn[2]
+            var list = word_defn[3]
+            $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', list)
         })
 
         if (learning)
@@ -29,8 +29,8 @@
                     },
                     success: function (message) {
                         message = JSON.parse(message)
-{#                        alert(message.message)#}
-                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="'+ word +'"]').attr('data-list', message.list)
+                        toastr['info'](message.message)
+                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)
                         console.log('New list: ' + message.list)
                     },
                     error: function (message) {

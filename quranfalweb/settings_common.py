@@ -33,9 +33,9 @@ STATICFILES_DIRS = [
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
 
 # don't need these
-USE_I18N = False # translation
-USE_L10N = False # local format for numbers, date etc
-USE_TZ = False # time zone aware times
+USE_I18N = False  # translation
+USE_L10N = False  # local format for numbers, date etc
+USE_TZ = False  # time zone aware times
 
 # CACHES = {
 #     'default': {
@@ -43,6 +43,8 @@ USE_TZ = False # time zone aware times
 #     }
 # }
 
+SESSION_SAVE_EVERY_REQUEST = True
+#otherwise, this is not saved in session: request.session['foo']['bar'] = 'baz' # 2 level dictionary
 
 """
 NOTES:
@@ -52,14 +54,12 @@ NOTES:
 # MEDIA_URL # URL for the media in MEDIA_ROOT
 """
 
-
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend', # Needed to login by username in Django admin, regardless of `allauth` ??
-    'allauth.account.auth_backends.AuthenticationBackend', # `allauth` specific authentication methods, such as login by e-mail
+    'django.contrib.auth.backends.ModelBackend',  # Needed to login by username in Django admin, regardless of `allauth` ??
+    'allauth.account.auth_backends.AuthenticationBackend',  # `allauth` specific authentication methods, such as login by e-mail
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # prints emails to console # needed for allauth
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # prints emails to console # needed for allauth
 
 # APP SPECIFIC SETTINGS #############################################################################################################################
 # allauth ###########################################################################################################################################
@@ -68,7 +68,7 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True # works if email confirmation done in the same browser as signing up
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True  # works if email confirmation done in the same browser as signing up
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "[Quran] "
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"

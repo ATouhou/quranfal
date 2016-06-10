@@ -9,7 +9,7 @@ from quran.models import Aya, DistinctWord
 class List(models.Model):
     name = models.CharField(max_length=50)
     ayas = models.ManyToManyField(Aya, through='UserAya', related_name='lists')
-    words = models.ManyToManyField(DistinctWord, through='UserWord', related_name='lists')
+    distinct_words = models.ManyToManyField(DistinctWord, through='UserWord', related_name='lists')
 
     def __str__(self):
         return self.name
