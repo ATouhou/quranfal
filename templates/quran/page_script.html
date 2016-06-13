@@ -1,4 +1,5 @@
 <script>
+
     $(document).ready(function () {
 
         user_words.forEach(function (word_defn) {
@@ -17,10 +18,11 @@
                 var sura = div.parent().parent().parent().attr('data-sura')
                 var aya = div.parent().parent().parent().attr('data-aya')
                 var utext = div.parent().prev().prev().html()
+                utext = remove_diacritics(utext)
 
                 $.ajax({
                     type: 'POST',
-                    url: 'http://127.0.0.1:8080/quran/learning/word/',
+                    url: '/quran/learning/word/',
                     data: {
                         sura: sura,
                         aya: aya,
@@ -30,11 +32,11 @@
                     success: function (message) {
                         message = JSON.parse(message)
                         toastr['info'](message.message)
-{#                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)#}
+                        {#                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)#}
                         $('a.word').each(function (index) {
-                            if ($(this).html() == utext)
+                            if (remove_diacritics($(this).html()) == utext)
                                 $(this).parent().attr('data-list', message.list)
-                            })
+                        })
                     },
                     error: function (message) {
                         message = JSON.parse(message)

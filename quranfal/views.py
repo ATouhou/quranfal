@@ -39,6 +39,7 @@ class LearningPageView(TemplateView):
         context['ayas'] = ayas
         context['display_word_meanings'] = get_setting(self.request, 'display_word_meanings')
         context['user_words'] = json.dumps(user_words)
+        context['page_number'] = page_number
         return context
 
 
@@ -94,7 +95,7 @@ class LearningMarkWord(View):
             user_word = UserWord(user=request.user, distinct_word=word.distinct_word, list_id=list_id)
 
         if deleted: # not deleted
-            msg = 'Word %s is deleted from the list' % word.utext
+            msg = 'Word %s is deleted.\n There are %d words in the list (%.2f%% of the Quran)' % (word.utext, old_stats['distinct_word_count'], old_stats['word_count']/TOTAL_WORD_COUNT)
         else:
             new_stats = self.get_list_stats(list_id)
             new_stats['distinct_word_count'] += 1
