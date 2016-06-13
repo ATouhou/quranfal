@@ -25,19 +25,22 @@
 
                 if (display_word_meanings && !learning)
                     new_html += '<div class="word_wrapper" data-word="' + index + '">'
+                            + '<div class="word_inner">'
                             + '<a  class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" '
                             + 'target="_blank">' + word + '</a>'
-                            + '<br><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
+                            + '</div><br><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
                 else if (learning)
                     new_html += '<div class="word_wrapper" data-word="' + (index +1) + '">'
+                            + '<div class="word_inner">'
                             + '<a  class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" '
                             + 'title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
-                            + '<br><div class="word_meaning ltr_safe"><div class="button known full"></div></div></div>'
+                            + '</div><br><div class="word_meaning ltr_safe"><div class="button known full"></div></div></div>'
                 else
                     new_html += '<div class="word_wrapper" data-word="' + index + '">'
+                            + '<div class="word_inner">'
                             + '<a  class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" '
                             + 'title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
-                            + '</div>'
+                            + '</div></div>'
             })
 
             aya.innerHTML = new_html

@@ -17,7 +17,7 @@
                 var word = div.parent().parent().attr('data-word')
                 var sura = div.parent().parent().parent().attr('data-sura')
                 var aya = div.parent().parent().parent().attr('data-aya')
-                var utext = div.parent().prev().prev().html()
+                var utext = div.parent().prev().prev().children().first().html()
                 utext = remove_diacritics(utext)
 
                 $.ajax({
@@ -35,7 +35,7 @@
                         {#                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)#}
                         $('a.word').each(function (index) {
                             if (remove_diacritics($(this).html()) == utext)
-                                $(this).parent().attr('data-list', message.list)
+                                $(this).parent().parent().attr('data-list', message.list)
                         })
                     },
                     error: function (message) {
