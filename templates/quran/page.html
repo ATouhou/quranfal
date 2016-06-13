@@ -14,6 +14,13 @@
     {% endif %}
 
     <div class="page_container">
+
+    {% if not_logged_in %}
+    <div class="login_notification">
+        You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
+    </div>
+    {% endif %}
+
         <div class="wire_frame">
             <div class="outer_frame">
                 <div class="wire_frame">
