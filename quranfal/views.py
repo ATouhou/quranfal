@@ -18,8 +18,10 @@ class LearningPageView(TemplateView):
 
         context['learning'] = False
         user_words = []
+        context['not_logged_in'] = True
         if self.request.user.is_authenticated():
             context['learning'] = get_setting(self.request, 'learning')
+            context['not_logged_in'] = False
             user = self.request.user
             user_aya_qs = UserAya.objects.filter(user=user).select_related('list')
             ayas = Aya.objects.filter(id__gte=page.aya_begin_id, id__lte=page.aya_end_id) \

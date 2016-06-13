@@ -31,3 +31,15 @@ div.word_meaning div.known:hover {
 div.word_meaning div.study:hover {
     background-color: rgba(222, 160, 64, 0.67);
 }
+
+div.login_notification a {
+    color: blue;
+}
+
+div.login_notification {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
