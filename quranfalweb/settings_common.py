@@ -76,7 +76,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login/"
 # ACCOUNT_SIGNUP_FORM_CLASS = "school.forms.SignupForm"
 
 LOGIN_URL = '/accounts/login/'  # needed for allauth
-LOGIN_REDIRECT_URL = '/quran/'  # needed for allauth
+LOGIN_REDIRECT_URL = '/quran/page/1'  # needed for allauth
 
 # Bootstrap3 ########################################################################################################################################
 BOOTSTRAP3 = {
