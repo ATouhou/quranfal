@@ -11,13 +11,13 @@
         })
 
         if (learning)
-            $('div.word_meaning').on('click', function (event) {
+            $('div.button').on('click', function (event) {
 
                 var div = $(event.target)
-                var word = div.parent().parent().attr('data-word')
-                var sura = div.parent().parent().parent().attr('data-sura')
-                var aya = div.parent().parent().parent().attr('data-aya')
-                var utext = div.parent().prev().prev().children().first().html()
+                var word = div.parent().attr('data-word')
+                var sura = div.parent().parent().attr('data-sura')
+                var aya = div.parent().parent().attr('data-aya')
+                var utext = div.parent().children().first().html()
                 utext = remove_diacritics(utext)
 
                 $.ajax({
@@ -33,9 +33,9 @@
                         message = JSON.parse(message)
                         toastr['info'](message.message)
                         {#                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)#}
-                        $('a.word').each(function (index) {
+                        $('div.word').each(function (index) {
                             if (remove_diacritics($(this).html()) == utext)
-                                $(this).parent().parent().attr('data-list', message.list)
+                                $(this).parent().attr('data-list', message.list)
                         })
                     },
                     error: function (message) {

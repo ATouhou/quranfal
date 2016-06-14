@@ -3,6 +3,19 @@
     {% url 'quran_index' as base_url %}
 
     <script>
+
+
+        $(document).ready(function(){
+            $('div.word').on('click', function (event) {
+                    var div = $(event.target)
+                    var word = div.parent().attr('data-word')
+                    var sura = div.parent().parent().attr('data-sura')
+                    var aya = div.parent().parent().attr('data-aya')
+
+                window.open('/quran/' + sura + '/' + aya + '/' + word, '_blank');
+            })
+        })
+
         ayas = $('span.aya')
         ayas.toArray().forEach(function (aya) {
             var meanings = word_meanings[aya.id]
@@ -25,21 +38,19 @@
 
                 if (display_word_meanings && !learning)
                     new_html += '<div class="word_wrapper" data-word="' + index + '">'
-                            + '<div class="word_inner">'
-                            + '<a  class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" '
-                            + 'target="_blank">' + word + '</a>'
+                            + '<div class="word">'
+                            + '<a class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" target="_blank">' + word + '</a>'
                             + '</div><br><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
                 else if (learning)
                     new_html += '<div class="word_wrapper" data-word="' + (index +1) + '">'
-                            + '<div class="word_inner">'
-                            + '<a  class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" '
-                            + 'title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
-                            + '</div><br><div class="word_meaning ltr_safe"><div class="button known full"></div></div></div>'
+                            + '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
+                            + '<div class="button known"></div>'
+                            + '<div class="button study"></div>'
+                            + '</div>'
                 else
                     new_html += '<div class="word_wrapper" data-word="' + index + '">'
-                            + '<div class="word_inner">'
-                            + '<a  class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" '
-                            + 'title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
+                            + '<div class="word">'
+                            + '<a class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
                             + '</div></div>'
             })
 

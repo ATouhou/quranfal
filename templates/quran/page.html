@@ -38,28 +38,28 @@
                                         </div>
                                     {% endif %}
 
-                                    <span>
-                                    <span class="aya" id="{{ aya.aya_id }}" data-sura="{{ aya.sura.number }}" data-aya="{{ aya.number }}"
-                                          data-learning="{{ aya.userayas.all.0.list_id }}">
-                                        {{ aya.text }}
+                                    <span class="aya_wrapper">
+                                        <span class="aya" id="{{ aya.aya_id }}" data-sura="{{ aya.sura.number }}" data-aya="{{ aya.number }}"
+                                              data-learning="{{ aya.userayas.all.0.list_id }}">
+                                            {{ aya.text }}
+                                        </span>
+
+                                        <span class="key" title="&lrm;{{aya.translations.all.0.text}}&lrm;">
+                                            {% if display_word_meanings or learning %}
+                                                <div class="word_wrapper">
+                                                <div class="word">
+                                            {% endif %}
+
+                                            <a class="aya_numerals" href="{{ aya.get_absolute_url }}">﴿{{ aya.number|arabic_numerals }}﴾</a>
+
+                                            {% if display_word_meanings or learning %}
+                                                </div>
+                                                </div>
+                                            {% endif %}
+                                        </span>
+
+                                        {{ aya.word_meanings_json|safe }}
                                     </span>
-
-                                    <span class="key" title="&lrm;{{aya.translations.all.0.text}}&lrm;">
-                                        {% if display_word_meanings or learning %}
-                                            <div class="word_wrapper">
-                                        {% endif %}
-
-                                        <a class="aya_numerals" href="{{ aya.get_absolute_url }}">﴿{{ aya.number|arabic_numerals }}﴾</a>
-
-                                        {% if display_word_meanings or learning %}
-                                            <br>
-                                            <div class="word_meaning" style="visibility:hidden;">.</div> <!-- just for spacing -->
-                                            </div>
-                                        {% endif %}
-                                    </span>
-
-                                    {{ aya.word_meanings_json|safe }}
-                                </span>
                                 {% endfor %}
                             </div>
                         </div>
