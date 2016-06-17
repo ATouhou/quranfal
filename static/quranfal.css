@@ -7,6 +7,11 @@ div.word_wrapper[data-list="2"] div.study {
     background-color: rgba(222, 160, 64, 0.67);
 }
 
+div.word_wrapper[data-list="2"] {
+    border: 1px solid rgba(222, 160, 64, 0.67);
+}
+
+
 div.word {
     height:45px;
 }

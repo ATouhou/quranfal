@@ -1,0 +1,5 @@
+Django==1.9
+psycopg2==2.6.1
+docutils
+django-allauth
+django-bootstrap3

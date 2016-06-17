@@ -10,7 +10,6 @@ INSTALLED_APPS += [
     'allauth.socialaccount.providers.google',
 
     'bootstrap3',
-    'debug_toolbar',
 
     'quran',
     'quranfal',
@@ -30,7 +29,7 @@ STATICFILES_DIRS = [
 ]
 
 # # the absolute path to the directory where collectstatic will collect static files for deployment
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
 
 # don't need these
 USE_I18N = False  # translation
