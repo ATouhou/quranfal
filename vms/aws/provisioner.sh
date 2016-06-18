@@ -70,12 +70,10 @@ cd $PROJECT_DIR
 export DJANGO_SETTINGS_MODULE=$PROJECT_NAME.settings_production
 
 # migrate
-$VENV_DIR/bin/python3 manage.py makemigrations --settings=quranfalweb.settings_production
 $VENV_DIR/bin/python3 manage.py migrate --settings=quranfalweb.settings_production
 
 $VENV_DIR/bin/python3 manage.py load_all --settings=quranfalweb.settings_production
 
 sudo $VENV_DIR/bin/python3 manage.py runserver 0.0.0.0:80 --settings=quranfalweb.settings_production # without sudo cant access port 80
-sudo /tmp/quranfalweb/bin/python3 manage.py runserver 0.0.0.0:80 --settings=quranfalweb.settings_production
 
 #source $PROVISION_DIR/nginx_install.sh $VM_DIR $VENV_DIR $PROJECT_NAME

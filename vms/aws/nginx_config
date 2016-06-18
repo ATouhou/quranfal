@@ -1,3 +1,8 @@
+
+upstream django {
+    server unix:/tmp/quranfalweb/uwsgi.sock; # for a file socket
+}
+
 server {
     listen 80;
     server_name 0.0.0.0;
@@ -12,13 +17,9 @@ server {
         #root /home/quran/quranfalweb;
     }
 
-#    location / {
-#       proxy_pass http://127.0.0.1:8001; #for runserver/gunicorn
-#       add_header X-Static miss;
-
-#        include uwsgi_params;		# for uWSGI
-#        uwsgi_pass 127.0.0.1:8001; #slower
-#        uwsgi_pass unix:/home/vagrant/quranfalweb.sock; # this does not work, work on later
-#    }
+    location / {
+        uwsgi_pass  django;
+        include     /home/quran/quranfalweb/vms/aws/uwsgi_params;
+    }
 
 }
