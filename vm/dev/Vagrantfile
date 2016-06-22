@@ -8,30 +8,28 @@ Vagrant.configure("2") do |config|
 
   config.vm.hostname = "dev-virtualbox"
   config.vm.box = "ubuntu/trusty64"
+
   config.vm.network "forwarded_port", guest: 8000, host: 8080
   config.vm.network "forwarded_port", guest: 5432, host: 5432
+
   config.vm.provider "virtualbox" do |vb, override|
   #    vb.memory = "4000"
   #    vb.cpus = 2
      vb.customize ["modifyvm", :id, "--memory", "2048", "--cpus", "2"]
   end
 
-#  config.vm.provision "shell", path: "./provisioner.sh", args: "quranfalweb" #, run: "always"
+
 
   config.vm.provision "shell", inline: <<-SHELL
 
+    PROJECT_NAME=quranfalweb
     PGSQL_VERSION=9.3
     PYTHON_VERSION=3.4
-    PROJECT_NAME=quranfalweb
     PROJECT_DIR=/home/quran/$PROJECT_NAME
     HOME_DIR=/home/vagrant
     VENV_DIR=/home/virtualenv
-    VM_NAME=dev
-    VM_DIR=$PROJECT_DIR/vm/$VM_NAME
-    SETTINGS=quranfalweb.settings_production
-
-    #sudo adduser edgleweb www-data
-
+    VM_DIR=$PROJECT_DIR/vm/dev
+    SETTINGS=quranfalweb.settings_development
 
     printf "================================================ updating system"
     sudo apt-get update -y
@@ -49,7 +47,7 @@ Vagrant.configure("2") do |config|
     sudo cp "$VM_DIR/postgresql-$PGSQL_VERSION.conf" "/etc/postgresql/$PGSQL_VERSION/main/postgresql.conf"
 
     printf "================================================ create project user and database"
-    sudo -u postgres psql -c "create database $PROJECT_NAME;" #db needs to be created before debugger installation so to create extension
+    sudo -u postgres psql -c "create database $PROJECT_NAME;"
     sudo -u postgres psql -c "create user $PROJECT_NAME with password '$PROJECT_NAME' superuser;"
 
     printf "================================================ adding localhost to /etc/hosts; lacks at aws"
@@ -67,8 +65,8 @@ Vagrant.configure("2") do |config|
     if [[ ! -d $VENV_DIR ]]; then
         cd /usr/local/bin
         virtualenv -p python3.4 $VENV_DIR
+        sudo chmod -R a+rwx $VENV_DIR
         cd $VENV_DIR/bin/
-        sudo chmod 777 activate
         ./activate
         sudo ./pip3 install --upgrade pip # for a bug in django
         sudo $VENV_DIR/bin/pip3 install -r $VM_DIR/requirements.txt
@@ -82,15 +80,14 @@ Vagrant.configure("2") do |config|
     printf "================================================ installing django-quran"
     cd $PROJECT_DIR/../django-quran
     sudo find . -name '*.pyc' -delete
-    sudo $VENV_DIR/bin/python3 setup.py install
+    sudo $VENV_DIR/bin/pip3 install -e .
     cd $PROJECT_DIR
 
-    printf "================================================ migrating apps"
-    $VENV_DIR/bin/python3 manage.py migrate --settings=$SETTINGS
-
     printf "================================================ loading data"
-    $PROJECT_DIR/scripts/shell/dumpdata.sh
-    # $VENV_DIR/bin/python3 manage.py load_all --settings=$SETTINGS
+    $PROJECT_DIR/scripts/shell/loaddata.sh
+
+    printf "================================================ migrating apps"
+    $VENV_DIR/bin/python3 manage.py migrate --settings=$SETTINGS # should not be doing anything after loading data
 
     # printf "================================================ running server"
     # sudo $VENV_DIR/bin/python3 manage.py runserver 0.0.0.0:80 --settings=$SETTINGS # without sudo cant access port 80
