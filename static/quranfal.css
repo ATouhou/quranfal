@@ -21,7 +21,6 @@ div.word:hover {
 }
 
 div.button {
-
 }
 
 div.known {
@@ -54,8 +53,7 @@ div.login_notification {
     margin-bottom: 10px;
 }
 
-/* login screen */
-
+/* login screen *****************************************/
 .gray-bg {
     background-color: #f3f3f4;
 }
