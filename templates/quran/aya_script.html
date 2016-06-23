@@ -26,7 +26,7 @@
             var new_html = ''
             var words = old_html.trim().split(' ')
             var words_to_highlight = (words_to_highlight_in_aya[aya.id] || []).concat(words_to_highlight_in_page)
-            debugger
+
             words_to_highlight = words_to_highlight.map(function(word){return remove_diacritics(word)})
 
             words.forEach(function (word, index) {

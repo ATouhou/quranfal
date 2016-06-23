@@ -1,0 +1,25 @@
+
+.idea/.name
+.idea/dataSources.ids
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/dictionaries/Matt.xml
+.idea/encodings.xml
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/quranfalweb (DESKTOP-A6OQQ5T's conflicted copy 2016-06-19).iml
+.idea/quranfalweb.iml
+.idea/vagrant.xml
+.idea/vcs.xml
+.idea/workspace (DESKTOP-A6OQQ5T's conflicted copy 2016-06-19).xml
+.idea/workspace.xml
+quranfal/__pycache__/
+quranfal/migrations/__pycache__/0008_list_table_initial_data.cpython-34.pyc
+quranfalweb/__pycache__/
+vm/dev/.vagrant/
+vm/dev/ssh.exe.stackdump
+vm/prod/.vagrant/
+/vm/prod/Vagrantfile
+/vm/prod/awskey.pem
+/vm/VagrantfileMultiMachine

@@ -22,5 +22,8 @@
 1. Install Vagrant + VirtualBox
 1. Download [django-quran](http://github.com/doganmeh/django-quran/) and place in the directory that you put quranfal
 1. From terminal go to quranfalweb/vm/dev
-1. Issue command: vagrant up
+1. Issue command: `vagrant up`
 1. Project running at 127.0.0.1:8080
+1. If for any reason Quran data does not load automatically, issue these two commands in project root:
+    1. `python manage.py migrate`
+    1. `python manage.py load_all`
