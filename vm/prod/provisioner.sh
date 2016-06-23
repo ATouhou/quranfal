@@ -62,7 +62,7 @@ sudo $VENV_DIR/bin/pip3 install -e .
 cd $PROJECT_DIR
 
 printf "================================================ collecting static"
-$VENV_DIR/bin/python3 manage.py collectstatic --noinput --settings=$SETTINGS
+sudo $VENV_DIR/bin/python3 manage.py collectstatic --noinput --settings=$SETTINGS
 
 printf "================================================ loading data"
 $PROJECT_DIR/scripts/shell/loaddata.sh

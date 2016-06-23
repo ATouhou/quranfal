@@ -13,6 +13,7 @@
 
 # To Do
 - A tool to study words added to 'study' list
+- Make it more mobile friendly
 - Settings page
 - Add grammatical information related to morphological structures
 - Add word-by-word meanings and translations in other languages
