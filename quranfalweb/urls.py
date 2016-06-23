@@ -17,12 +17,14 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
+from django.views.generic import RedirectView
 
 from quranfal.views import LearningPageView, LearningMarkAya, LearningMarkWord
 
 
 
 urlpatterns = [
+
     url(r'^accounts/', include('allauth.urls')),
 
     url(r'^admin/', admin.site.urls),
@@ -32,4 +34,6 @@ urlpatterns = [
     url(r'^quran/learning/word/$', login_required(LearningMarkWord.as_view()), name='learning_mark_word'),
 
     url(r'^quran/', include('quran.urls')),
+
+    url(r'^', RedirectView.as_view(url='/quran/page/1/')),
 ]
