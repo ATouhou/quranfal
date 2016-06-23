@@ -5,16 +5,18 @@
     <script>
 
 
-        $(document).ready(function(){
-            $('div.word').on('click', function (event) {
-                    var div = $(event.target)
-                    var word = div.parent().attr('data-word')
-                    var sura = div.parent().parent().attr('data-sura')
-                    var aya = div.parent().parent().attr('data-aya')
+        if (learning)
+            $(document).ready(function(){
+                $('div.word').on('click', function (event) {
+                        var div = $(event.target)
+                        var word = div.parent().attr('data-word')
+                        var sura = div.parent().parent().attr('data-sura')
+                        var aya = div.parent().parent().attr('data-aya')
 
-                window.open('/quran/' + sura + '/' + aya + '/' + word, '_blank');
+                    window.open('/quran/' + sura + '/' + aya + '/' + word, '_blank');
+                })
             })
-        })
+
 
         ayas = $('span.aya')
         ayas.toArray().forEach(function (aya) {
