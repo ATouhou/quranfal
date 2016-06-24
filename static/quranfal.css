@@ -12,8 +12,8 @@ div.word_wrapper[data-list="2"] {
 }
 
 div.word_wrapper {
-    margin-top: 5px;
-    height: 85px;
+    margin-top: 10px;
+    height: 80px;
 }
 
 div.word_wrapper div:hover {
@@ -26,6 +26,7 @@ div.word_wrapper div.study {
 }
 
 div.word_wrapper div.word {
+    top: -5px;
     position: relative;
     height: 50px;
 }
@@ -33,7 +34,7 @@ div.word_wrapper div.word {
 div.word_wrapper div.details {
     position: relative;
     top: -60px;
-    height: 40px;
+    height: 35px;
 }
 
 div.word_wrapper div.known {
