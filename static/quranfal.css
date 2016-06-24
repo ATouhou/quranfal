@@ -12,8 +12,8 @@ div.word_wrapper[data-list="2"] {
 }
 
 div.word_wrapper {
-    margin-top: 10px;
-    height: 90px;
+    margin-top: 5px;
+    height: 85px;
 }
 
 div.word_wrapper div:hover {
@@ -39,7 +39,7 @@ div.word_wrapper div.details {
 div.word_wrapper div.known {
     position: relative;
     top: -60px;
-    height: 30px;
+    height: 25px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
 }
 

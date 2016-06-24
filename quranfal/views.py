@@ -80,6 +80,7 @@ class LearningMarkWord(View):
         aya_number = request.POST.get('aya')
         word_number = request.POST.get('word')
         list_id = request.POST.get('list')
+        list_name = List.objects.get(id=list_id).name.lower()
         word = Word.objects.filter(sura_id=sura_number, aya__number=aya_number, number=word_number).first()
         user_word = word.distinct_word.userwords.filter(user=self.request.user).first()
         deleted=False
@@ -97,7 +98,7 @@ class LearningMarkWord(View):
             user_word = UserWord(user=request.user, distinct_word=word.distinct_word, list_id=list_id)
 
         if deleted: # not deleted
-            msg = 'Word %s is deleted.\n There are %d words in the list (%.2f%% of the Quran)' % (word.utext, old_stats['distinct_word_count'], old_stats['word_count']/TOTAL_WORD_COUNT*100)
+            msg = 'Word %s is deleted.\n There are %d words in the %s (%.2f%% of the Quran).' % (word.utext, old_stats['distinct_word_count'], list_name, old_stats['word_count']/TOTAL_WORD_COUNT*100)
         else:
             new_stats = self.get_list_stats(list_id)
             new_stats['distinct_word_count'] += 1
@@ -106,8 +107,8 @@ class LearningMarkWord(View):
             user_word.save()
 
 
-            msg = 'Word %s is %d times in Quran!\nThere are %d words in the list (%.2f%% of the Quran)' % \
-                  (word.utext, word.distinct_word.count, new_stats['distinct_word_count'], new_stats['word_count']/TOTAL_WORD_COUNT*100)
+            msg = 'Word %s is %d times in Quran!\nThere are %d words in the %s (%.2f%% of the Quran).' % \
+                  (word.utext, word.distinct_word.count, new_stats['distinct_word_count'], list_name, new_stats['word_count']/TOTAL_WORD_COUNT*100)
 
         message = {
             'message': msg,
