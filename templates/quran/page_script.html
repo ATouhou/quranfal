@@ -2,6 +2,8 @@
 
     $(document).ready(function () {
 
+        $('body').bind('touchstart', function() {}); //magic to enable hover on touch devices
+
         user_words.forEach(function (word_defn) {
             var sura = word_defn[0]
             var aya = word_defn[1]
