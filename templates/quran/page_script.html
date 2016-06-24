@@ -31,6 +31,7 @@
                     },
                     success: function (message) {
                         message = JSON.parse(message)
+                        toastr.remove()
                         toastr['info'](message.message)
                         {#                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)#}
                         $('div.word').each(function (index) {
