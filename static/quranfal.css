@@ -26,9 +26,10 @@ div.word_wrapper div.details {
     height: 40px;
 }
 
-div.word_wrapper div.details:hover {
-    background-color: rgba(105, 215, 40, 0.11);
+div.word_wrapper div:hover {
+    background-color: rgba(199, 215, 37, 0.11);
 }
+
 
 div.word_wrapper div.known {
     position: relative;
@@ -37,18 +38,10 @@ div.word_wrapper div.known {
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
 }
 
-div.word_wrapper div.known:hover {
-    background-color: rgba(105, 215, 40, 0.11);
-}
-
 div.word_wrapper div.study {
     position: relative;
     top: -60px;
     height: 20px;
-}
-
-div.word_wrapper div.study:hover {
-    background-color: rgba(222, 160, 64, 0.37);
 }
 
 /* login screen *****************************************/
