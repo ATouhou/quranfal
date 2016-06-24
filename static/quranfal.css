@@ -12,7 +12,17 @@ div.word_wrapper[data-list="2"] {
 }
 
 div.word_wrapper {
-    height: 100px;
+    margin-top: 10px;
+    height: 90px;
+}
+
+div.word_wrapper div:hover {
+    background-color: rgba(199, 215, 37, 0.11);
+}
+
+div.word_wrapper div.study {
+    position: relative;
+    height: 20px;
 }
 
 div.word_wrapper div.word {
@@ -26,22 +36,11 @@ div.word_wrapper div.details {
     height: 40px;
 }
 
-div.word_wrapper div:hover {
-    background-color: rgba(199, 215, 37, 0.11);
-}
-
-
 div.word_wrapper div.known {
     position: relative;
     top: -60px;
     height: 30px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
-}
-
-div.word_wrapper div.study {
-    position: relative;
-    top: -60px;
-    height: 20px;
 }
 
 /* login screen *****************************************/

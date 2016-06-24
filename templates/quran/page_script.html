@@ -19,7 +19,7 @@
                 var word = div.parent().attr('data-word')
                 var sura = div.parent().parent().attr('data-sura')
                 var aya = div.parent().parent().attr('data-aya')
-                var utext = div.parent().children().first().html()
+                var utext = div.parent().children('div.word').first().html()
                 utext = remove_diacritics(utext)
 
                 $.ajax({

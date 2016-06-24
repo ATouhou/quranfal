@@ -46,10 +46,10 @@
                             + '</div><br><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
                 else if (learning)
                     new_html += '<div class="word_wrapper" data-word="' + (index +1) + '">'
+                            + '<div class="study button"></div>'
                             + '<div class="word">' + word + '</div>'
                             + '<div class="details" title="&lrm;' + meanings[index] + '&lrm;"></div>'
                             + '<div class="known button"></div>'
-                            + '<div class="study button"></div>'
                             + '</div>'
                 else
                     new_html += '<div class="word_wrapper" data-word="' + index + '">'

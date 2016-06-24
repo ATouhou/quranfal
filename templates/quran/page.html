@@ -47,10 +47,11 @@
                                         <span class="key" title="&lrm;{{aya.translations.all.0.text}}&lrm;">
                                             {% if display_word_meanings or learning %}
                                                 <div class="word_wrapper">
+                                                <div class="study button"></div>
                                                 <div class="word">
                                             {% endif %}
 
-                                            <a class="aya_numerals" href="{{ aya.get_absolute_url }}">﴿{{ aya.number|arabic_numerals }}﴾</a>
+                                            <a class="aya_numerals" href="{{ aya.get_absolute_url }}" target="_blank">﴿{{ aya.number|arabic_numerals }}﴾</a>
 
                                             {% if display_word_meanings or learning %}
                                                 </div>
