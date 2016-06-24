@@ -6,7 +6,7 @@
 
         if (learning)
             $(document).ready(function(){
-                $('div.word').on('click', function (event) {
+                $('div.word_wrapper div.details').on('click', function (event) {
                         var div = $(event.target)
                         var word = div.parent().attr('data-word')
                         var sura = div.parent().parent().attr('data-sura')
@@ -46,9 +46,10 @@
                             + '</div><br><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
                 else if (learning)
                     new_html += '<div class="word_wrapper" data-word="' + (index +1) + '">'
-                            + '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
-                            + '<div class="button known"></div>'
-                            + '<div class="button study"></div>'
+                            + '<div class="word">' + word + '</div>'
+                            + '<div class="details" title="&lrm;' + meanings[index] + '&lrm;"></div>'
+                            + '<div class="known button"></div>'
+                            + '<div class="study button"></div>'
                             + '</div>'
                 else
                     new_html += '<div class="word_wrapper" data-word="' + index + '">'

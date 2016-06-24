@@ -11,28 +11,36 @@ div.word_wrapper[data-list="2"] {
     border: 1px solid rgba(222, 160, 64, 0.67);
 }
 
-
-div.word {
-    height:45px;
+div.word_wrapper {
+    height: 100px;
 }
 
-div.word:hover {
+div.word_wrapper div.word {
+    position: relative;
+    height: 50px;
+}
+
+div.word_wrapper div.details {
+    position: relative;
+    top: -60px;
+    height: 40px;
+}
+
+div.word_wrapper div.details:hover {
     background-color: rgba(105, 215, 40, 0.22);
 }
 
-div.button {
-}
-
-div.known {
-    width:100%;
+div.word_wrapper div.known {
+    position: relative;
+    top: -60px;
     height: 30px;
-    margin-top: -15px;
+    border-bottom: 1px solid rgba(105, 215, 40, 0.22);
 }
 
-div.study {
-    width:100%;
-    height: 10px;
-    margin-bottom: 10px;
+div.word_wrapper div.study {
+    position: relative;
+    top: -60px;
+    height: 20px;
 }
 
 div.known:hover {
@@ -41,16 +49,6 @@ div.known:hover {
 
 div.study:hover {
     background-color: rgba(222, 160, 64, 0.67);
-}
-
-div.login_notification a {
-    color: blue;
-}
-
-div.login_notification {
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 /* login screen *****************************************/
@@ -118,6 +116,16 @@ div.login_notification {
 
 .footer {
     text-align: center;
+}
+
+div.login_notification a {
+    color: blue;
+}
+
+div.login_notification {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 
