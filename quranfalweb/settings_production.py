@@ -17,7 +17,7 @@ DATABASES['default'] = {
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'quran4me'
-EMAIL_HOST_PASSWORD = 'quran4mesgpw'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 
 del EMAIL_BACKEND # to go back to default
