@@ -2,7 +2,9 @@
 
 from .settings_common import *
 
-debug = False
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'quran4.me', 'www.quran4.me']
+
 
 DATABASES['default'] = {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',

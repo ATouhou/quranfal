@@ -18,7 +18,7 @@ vm/dev/.vagrant/
 vm/prod/.vagrant/
 vm/dev/ssh.exe.stackdump
 /vm/prod/Vagrantfile
-/vm/prod/awskey.pem
+/vm/prod/awskey*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
