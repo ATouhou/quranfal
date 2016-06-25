@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+
+  config.vm.synced_folder "../../../", "/home/quran", type: "rsync"
+
+  config.vm.define "prod" do |prod|
+    prod.vm.box = "dummy"
+    prod.vm.hostname = "prod-aws"
+
+    prod.ssh.username = "ubuntu"
+    prod.ssh.private_key_path = "/home/vagrant/awskey.pem"
+#    prod.nfs.functional = false # workaround for folder sharing not working
+    prod.vm.provider :aws do |aws|
+        aws.ami = "ami-9abea4fb" # Ubuntu Server 14.04 LTS (HVM), SSD Volume Type
+        aws.region = 'us-west-2'
+        aws.instance_type = "t2.micro"
+        aws.access_key_id = ""
+        aws.secret_access_key = ""
+        aws.keypair_name = "awskey"
+      end
+  end
+
+
+  config.vm.provision "shell", path: "./provisioner.sh", args: "quranfalweb" #, run: "always"
+
+end

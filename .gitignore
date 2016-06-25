@@ -15,11 +15,10 @@
 .idea/workspace (DESKTOP-A6OQQ5T's conflicted copy 2016-06-19).xml
 .idea/workspace.xml
 vm/dev/.vagrant/
-vm/dev/ssh.exe.stackdump
 vm/prod/.vagrant/
+vm/dev/ssh.exe.stackdump
 /vm/prod/Vagrantfile
 /vm/prod/awskey.pem
-/vm/VagrantfileMultiMachine
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
