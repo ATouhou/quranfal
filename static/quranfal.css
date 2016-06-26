@@ -3,16 +3,11 @@ div.word_wrapper[data-list="1"] div.known {
     background-color: rgba(105, 215, 40, 0.22);
 }
 
-div.word_wrapper[data-list="2"] div.study {
-    background-color: rgba(222, 160, 64, 0.67);
-}
-
-div.word_wrapper[data-list="2"] {
-    border: 1px solid rgba(222, 160, 64, 0.67);
+div.word_wrapper[data-list="2"] div.known {
+    background-color: rgba(222, 160, 64, 0.41);
 }
 
 div.word_wrapper {
-    margin-top: 10px;
     height: 80px;
 }
 
@@ -23,24 +18,25 @@ div.word_wrapper div:hover {
 div.word_wrapper div.study {
     position: relative;
     height: 20px;
+    z-index: 10;
 }
 
 div.word_wrapper div.word {
-    top: -5px;
+    top: -10px;
     position: relative;
     height: 50px;
 }
 
 div.word_wrapper div.details {
     position: relative;
-    top: -60px;
+    top: -65px;
     height: 35px;
 }
 
 div.word_wrapper div.known {
     position: relative;
-    top: -60px;
-    height: 25px;
+    top: -65px;
+    height: 30px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
 }
 

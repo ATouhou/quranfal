@@ -4,24 +4,19 @@
 
     {% load quran %}
 
-    {% if display_word_meanings %}
-        <script> display_word_meanings = true </script>
-    {% endif %}
-
     {% if learning %}
-        <script> var learning = true </script>
         <script> var user_words = {{ user_words | safe }}</script>
     {% endif %}
 
     <div class="page_container">
 
-    <div class="login_notification">
-    {% if not_logged_in %}
-        You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
-    {% else %}
-        <a href="/accounts/logout/">log out</a>
-    {% endif %}
-    </div>
+        <div class="login_notification">
+            {% if not_logged_in %}
+                You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
+            {% else %}
+                <a href="/accounts/logout/">log out</a>
+            {% endif %}
+        </div>
 
         <div class="wire_frame">
             <div class="outer_frame">
@@ -29,17 +24,20 @@
                     <div class="inner_frame">
                         <div class="wire_frame" style="padding: 3px;">
                             <div class="page wire_frame" style="padding: 10px;">
-                                {% for aya in ayas %}
 
-                                    {% if aya.bismillah %}
-                                        <div class="sura-header">سورة {{ aya.sura.text }}</div>
-                                        <div class="bismillah">
-                                            {{ aya.bismillah }}
-                                        </div>
-                                    {% endif %}
+                                <div class="aya_group{{ learning|yesno:" learning," }}{{ display_word_meanings|yesno:" display-word-meanings," }}">
+                                    {% for aya in ayas %}
 
-                                    <span class="aya_wrapper">
-                                        <span class="aya" id="{{ aya.aya_id }}" data-sura="{{ aya.sura.number }}" data-aya="{{ aya.number }}"
+                                        {% if aya.bismillah %}
+                                            <div class="sura-header">سورة {{ aya.sura.text }}</div>
+                                            <div class="bismillah">
+                                                {{ aya.bismillah }}
+                                            </div>
+                                        {% endif %}
+
+                                        <span class="aya_wrapper">
+                                        <span class="aya" id="{{ aya.aya_id }}" data-sura="{{ aya.sura.number }}"
+                                              data-aya="{{ aya.number }}"
                                               data-learning="{{ aya.userayas.all.0.list_id }}">
                                             {{ aya.text }}
                                         </span>
@@ -51,7 +49,8 @@
                                                 <div class="word">
                                             {% endif %}
 
-                                            <a class="aya_numerals" href="{{ aya.get_absolute_url }}" target="_blank">﴿{{ aya.number|arabic_numerals }}﴾</a>
+                                            <a class="aya_numerals" href="{{ aya.get_absolute_url }}"
+                                               target="_blank">﴿{{ aya.number|arabic_numerals }}﴾</a>
 
                                             {% if display_word_meanings or learning %}
                                                 </div>
@@ -61,7 +60,9 @@
 
                                         {{ aya.word_meanings_json|safe }}
                                     </span>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -72,7 +73,6 @@
         {% include 'quran/page_navigation.html' %}
     </div>
 
-    {% include "quran/aya_script.html" %}
     {% include "quran/page_script.html" %}
 
 {% endblock %}

@@ -1,9 +1,65 @@
 <script>
 
+    // convert ayas to words first!
+    var aya_groups = $('div.aya_group')
+    aya_groups.toArray().forEach(function (group) {
+        var group_jq = $(group)
+        var learning = group_jq.hasClass('learning')
+        var display_word_meanings = group_jq.hasClass('display-word-meanings')
+
+        var ayas = group_jq.children('.aya_wrapper').children('.aya')
+
+        ayas.toArray().forEach(function (aya) {
+            var meanings = word_meanings[aya.id]
+            var sura_number = aya.attributes['data-sura'].value
+            var aya_number = aya.attributes['data-aya'].value
+            var old_html = aya.innerHTML
+            var new_html = ''
+            var words = old_html.trim().split(' ')
+            var words_to_highlight = (words_to_highlight_in_aya[aya.id] || []).concat(words_to_highlight_in_page)
+
+            words_to_highlight = words_to_highlight.map(function (word) {
+                return remove_diacritics(word)
+            })
+
+            words.forEach(function (word, index) {
+
+                // highlight words if necessary
+                words_to_highlight.forEach(function (word_to_highlight) {
+                    if (remove_diacritics(word).indexOf(word_to_highlight) >= 0) { // word_to_highlight might be a substring of the word
+                        word = '<span class="highlighted_word">' + word + '</span>'
+                        // todo break loop here - if word highlighted once
+                    }
+                })
+
+                if (display_word_meanings && !learning)
+                    new_html += '<div class="word_wrapper" data-word="' + index + '">'
+                            + '<div class="word">'
+                            + '<a class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" target="_blank">' + word + '</a>'
+                            + '</div><br><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
+                else if (learning)
+                    new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
+                            + '<div class="study button"></div>'
+                            + '<div class="word">' + word + '</div>'
+                            + '<div class="details" title="&lrm;' + meanings[index] + '&lrm;"></div>'
+                            + '<div class="known button"></div>'
+                            + '</div>'
+                else
+                    new_html += '<div class="word_wrapper" data-word="' + index + '">'
+                            + '<div class="word">'
+                            + '<a class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
+                            + '</div></div>'
+            })
+
+            aya.innerHTML = new_html
+        })
+    })
+
+
+
     $(document).ready(function () {
 
-        $('body').bind('touchstart', function() {}); //magic to enable hover on touch devices
-
+        // set the data-list attribute for words in user's lists
         user_words.forEach(function (word_defn) {
             var sura = word_defn[0]
             var aya = word_defn[1]
@@ -12,42 +68,54 @@
             $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', list)
         })
 
-        if (learning)
-            $('div.button').on('click', function (event) {
+        //magic to enable hover on touch devices
+        $('body').bind('touchstart', function () {
+        });
 
-                var div = $(event.target)
-                var word = div.parent().attr('data-word')
-                var sura = div.parent().parent().attr('data-sura')
-                var aya = div.parent().parent().attr('data-aya')
-                var utext = div.parent().children('div.word').first().html()
-                utext = remove_diacritics(utext)
+        // open word details on click
+        $('div.learning div.details').on('click', function (event) {
+            var div = $(event.target)
+            var word = div.parent().attr('data-word')
+            var sura = div.parent().parent().attr('data-sura')
+            var aya = div.parent().parent().attr('data-aya')
+            window.open('/quran/' + sura + '/' + aya + '/' + word + '/', '_blank');
+        })
 
-                $.ajax({
-                    type: 'POST',
-                    url: '/quran/learning/word/',
-                    data: {
-                        sura: sura,
-                        aya: aya,
-                        word: word,
-                        list: div.hasClass('known') ? 1 : 2
-                    },
-                    success: function (message) {
-                        message = JSON.parse(message)
-                        toastr.remove()
-                        toastr['info'](message.message)
-                        {#                        $('span#id_' + sura + '_' + aya + ' div.word_wrapper[data-word="' + word + '"]').attr('data-list', message.list)#}
-                        $('div.word').each(function (index) {
-                            if (remove_diacritics($(this).html()) == utext)
-                                $(this).parent().attr('data-list', message.list)
-                        })
-                    },
-                    error: function (message) {
-                        message = JSON.parse(message)
-                        alert(message.message)
-                        console.log(message)
-                    }
-                })
+        // ajax save for words in learning mode
+        $('.learning div.button').on('click', function (event) {
+
+            var div = $(event.target)
+            var word = div.parent().attr('data-word')
+            var sura = div.parent().parent().attr('data-sura')
+            var aya = div.parent().parent().attr('data-aya')
+            var utext = div.parent().children('div.word').first().html()
+            utext = remove_diacritics(utext)
+
+            $.ajax({
+                type: 'POST',
+                url: '/quran/learning/word/',
+                data: {
+                    sura: sura,
+                    aya: aya,
+                    word: word,
+                    list: div.hasClass('known') ? 1 : 2
+                },
+                success: function (message) {
+                    message = JSON.parse(message)
+                    toastr.remove()
+                    toastr['info'](message.message)
+                    $('div.word').each(function (index) {
+                        if (remove_diacritics($(this).html()) == utext)
+                            $(this).parent().attr('data-list', message.list)
+                    })
+                },
+                error: function (message) {
+                    message = JSON.parse(message)
+                    alert(message.message)
+                    console.log(message)
+                }
             })
+        })
 
         // CSRF code
         function getCookie(name) {
