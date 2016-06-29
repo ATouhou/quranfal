@@ -1,7 +1,7 @@
-{% extends 'quran/base.html' %}
+{% extends 'quranfal/base.html' %}
 
 {% block body %}
-
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Serif" rel="stylesheet" type="text/css">
     {% load quran %}
 
     {% if learning %}
@@ -16,6 +16,7 @@
             {% else %}
                 <a href="/accounts/logout/">log out</a>
             {% endif %}
+        | <a href="#0" class="cd-btn">settings</a>
         </div>
 
         <div class="wire_frame">
@@ -25,7 +26,8 @@
                         <div class="wire_frame" style="padding: 3px;">
                             <div class="page wire_frame" style="padding: 10px;">
 
-                                <div class="aya_group{{ learning|yesno:" learning," }}{{ display_word_meanings|yesno:" display-word-meanings," }}">
+                                <div class="aya_group
+                                        {{ learning|yesno:" learning," }}{{ display_word_meanings|yesno:" display-word-meanings," }}">
                                     {% for aya in ayas %}
 
                                         {% if aya.bismillah %}
@@ -73,6 +75,7 @@
         {% include 'quran/page_navigation.html' %}
     </div>
 
-    {% include "quran/page_script.html" %}
+
+    {% include "quranfal/page_script.html" %}
 
 {% endblock %}

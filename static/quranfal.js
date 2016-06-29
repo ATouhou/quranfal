@@ -71,3 +71,38 @@ function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method))
 }
 
+jQuery(document).ready(function ($) {
+
+    // ajax setup
+    $.ajaxSetup({
+        crossDomain: false, // obviates need for sameOrigin test
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'))
+            }
+        }
+    })
+
+    //slide-in panel: open the  panel
+    $('.cd-btn').on('click', function (event) {
+        event.preventDefault()
+
+        $.ajax({
+            type: "GET",
+            url: '/quran/settings/',
+            // data: "id=" + id, // appears as $_GET['id'] @ your backend side
+            success: function (data) {
+                $('div.cd-panel-content').html(data)
+                $('.cd-panel').addClass('is-visible')
+            }
+        })
+    })
+
+    //slide-in panel: close the  panel
+    $('.cd-panel').on('click', function (event) {
+        if ($(event.target).is('.cd-panel') || $(event.target).is('.cd-panel-close')) {
+            $('.cd-panel').removeClass('is-visible')
+            event.preventDefault()
+        }
+    })
+})

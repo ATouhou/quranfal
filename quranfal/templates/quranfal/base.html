@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Holy Qur'an</title>
+
+    <link rel="stylesheet" href="{% static 'quranfal.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'quran/quran.css' %}" type="text/css"/>
+
+    <script src="{% static 'jquery/jquery-2.2.4.js' %}"></script>
+    <script src="{% static 'modernizr.js' %}"></script>
+
+    <script src="{% static 'toastr/toastr.min.js' %}"></script>
+    <link href="{% static 'toastr/toastr.min.css' %}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}" type="text/css"/>
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+    <script src="{% static 'quran/quran.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css' %}" type="text/css" media="screen"/>
+    <script type="text/javascript" src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}"></script>
+
+    <script>
+        var word_meanings = {}
+        var words_to_highlight_in_aya = {}
+        var words_to_highlight_in_page = []
+        var display_word_meanings = false
+        var learning = false
+
+        $(document).ready(function () {
+            $('.fancybox').fancybox()
+
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "500",
+                "hideDuration": "500",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        })
+    </script>
+</head>
+
+{% load bootstrap3 %}
+
+<body>
+{% block header %}
+{% endblock %}
+
+{% if messages %}
+    <div>
+        {% for message in messages %}
+            {% bootstrap_alert message %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% block body %}
+{% endblock %}
+
+{% block footer %}
+    <div class="page_container">
+        <div class="footer m-t">
+            <small> Quran4.me &copy; 2016</small>
+        </div>
+    </div>
+{% endblock %}
+</body>
+
+
+<div class="cd-panel from-right">
+    <header class="cd-panel-header">
+        <div>Settings</div>
+        <a href="#0" class="cd-panel-close">Close</a>
+    </header>
+
+    <div class="cd-panel-container">
+        <div class="cd-panel-content">
+        </div> <!-- cd-panel-content -->
+    </div> <!-- cd-panel-container -->
+</div> <!-- cd-panel -->
+
+</html>

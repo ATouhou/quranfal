@@ -1,15 +1,18 @@
 import json
 from django.db.models import Prefetch, Sum
+from django import forms
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.generic import TemplateView, View
-from quran.models import Page, Aya, Word, DistinctWord
+from quran.models import Page, Aya, Word, DistinctWord, Translation
 from quran.views import prefetch_aya_translations, get_setting
 from quranfal.models import UserAya, UserWord, List
+from django.http import HttpResponseRedirect
 
 
 class LearningPageView(TemplateView):
-    template_name = 'quran/page.html'
+    template_name = 'quranfal/page.html'
 
     def get_context_data(self, page_number, **kwargs):
         context = super(LearningPageView, self).get_context_data(**kwargs)
@@ -115,3 +118,29 @@ class LearningMarkWord(View):
             'list': 0 if deleted else user_word.list_id
         }
         return HttpResponse(json.dumps(message), content_type='text/html')
+
+
+class SettingsForm(forms.Form):
+    translation = forms.ChoiceField(choices=[(t.id, t.text) for t in Translation.objects.all()])
+    learning = forms.BooleanField(required=False)
+    show_word_meanings = forms.BooleanField(required=False)
+
+
+def settings(request):
+    if request.method == 'POST':
+        form = SettingsForm(request.POST)
+        if form.is_valid():
+            request.session['translation'] = form.cleaned_data['translation']
+            request.session['learning'] = form.cleaned_data['learning']
+            request.session['show_word_meanings'] = form.cleaned_data['show_word_meanings']
+            return HttpResponseRedirect('/quran/page/6/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = SettingsForm(initial={
+            'translation':get_setting(request, 'translation'),
+            'learning':get_setting(request, 'learning'),
+            'show_word_meanings': get_setting(request, 'show_word_meanings'),
+        })
+
+    return render(request, 'quranfal/settings.html', {'form': form})

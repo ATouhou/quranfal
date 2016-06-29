@@ -19,9 +19,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView
 
-from quranfal.views import LearningPageView, LearningMarkAya, LearningMarkWord
-
-
+from quranfal.views import LearningPageView, LearningMarkAya, LearningMarkWord, settings
 
 urlpatterns = [
 
@@ -32,6 +30,8 @@ urlpatterns = [
     url(r'^quran/page/(?P<page_number>\d+)/$', LearningPageView.as_view(), name='quran_page'),
     url(r'^quran/learning/aya/$', login_required(LearningMarkAya.as_view()), name='learning_mark_aya'),
     url(r'^quran/learning/word/$', login_required(LearningMarkWord.as_view()), name='learning_mark_word'),
+
+    url(r'^quran/settings/$', login_required(settings), name='learning_mark_word'),
 
     url(r'^quran/', include('quran.urls')),
 
