@@ -1,6 +1,12 @@
 {% extends 'quranfal/base.html' %}
 
 {% block body %}
+
+{% load static %}
+<script src="{% static 'quickflip2/jquery.quickflip.source.js' %}"></script>
+<link rel="stylesheet" href="{% static 'quickflip2/demo/css/basic-quickflips.css' %}"/>
+
+
     <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Serif" rel="stylesheet" type="text/css">
     {% load quran %}
 
@@ -15,8 +21,9 @@
                 You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
             {% else %}
                 <a href="/accounts/logout/">log out</a>
+                | <a href="#0" class="cd-btn">settings</a>
+                | <a href="/quran/study/saved/" class="fancybox fancybox.ajax">words saved</a>
             {% endif %}
-        | <a href="#0" class="cd-btn">settings</a>
         </div>
 
         <div class="wire_frame">
@@ -27,7 +34,7 @@
                             <div class="page wire_frame" style="padding: 10px;">
 
                                 <div class="aya_group
-                                        {{ learning|yesno:" learning," }}{{ display_word_meanings|yesno:" display-word-meanings," }}">
+                                        {{ learning|yesno:" learning," }}{{ show_word_meanings|yesno:" show-word-meanings," }}">
                                     {% for aya in ayas %}
 
                                         {% if aya.bismillah %}
@@ -38,6 +45,7 @@
                                         {% endif %}
 
                                         <span class="aya_wrapper">
+
                                         <span class="aya" id="{{ aya.aya_id }}" data-sura="{{ aya.sura.number }}"
                                               data-aya="{{ aya.number }}"
                                               data-learning="{{ aya.userayas.all.0.list_id }}">
@@ -45,8 +53,8 @@
                                         </span>
 
                                         <span class="key" title="&lrm;{{aya.translations.all.0.text}}&lrm;">
-                                            {% if display_word_meanings or learning %}
-                                                <div class="word_wrapper">
+                                            {% if show_word_meanings or learning %}
+                                                <div class="word_wrapper key">
                                                 <div class="study button"></div>
                                                 <div class="word">
                                             {% endif %}
@@ -54,10 +62,13 @@
                                             <a class="aya_numerals" href="{{ aya.get_absolute_url }}"
                                                target="_blank">﴿{{ aya.number|arabic_numerals }}﴾</a>
 
-                                            {% if display_word_meanings or learning %}
+                                            {% if learning or show_word_meanings%}
                                                 </div>
+                                                <div class="details"></div>
+                                                <div class="know button"></div>
                                                 </div>
                                             {% endif %}
+
                                         </span>
 
                                         {{ aya.word_meanings_json|safe }}

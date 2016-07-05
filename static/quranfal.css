@@ -38,6 +38,8 @@ div.word_wrapper div.known {
     top: -65px;
     height: 30px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
+    font-size:large;
+
 }
 
 /* login screen ******************************************************************/
@@ -126,6 +128,9 @@ div.login_notification {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+
+/* misc utilities */
+
 
 /* margins & paddings **************************************************/
 .p-xxs {

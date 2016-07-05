@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{% static 'quranfal.css' %}" type="text/css"/>
     <link rel="stylesheet" href="{% static 'quran/quran.css' %}" type="text/css"/>
 
+    <script src="{% static 'quran/quran.js' %}"></script>
+
     <script src="{% static 'jquery/jquery-2.2.4.js' %}"></script>
     <script src="{% static 'modernizr.js' %}"></script>
 
@@ -20,8 +22,6 @@
 
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}" type="text/css"/>
     <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
-
-    <script src="{% static 'quran/quran.js' %}"></script>
 
     <link rel="stylesheet" href="{% static 'fancybox/source/jquery.fancybox.css' %}" type="text/css" media="screen"/>
     <script type="text/javascript" src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}"></script>
@@ -32,28 +32,6 @@
         var words_to_highlight_in_page = []
         var display_word_meanings = false
         var learning = false
-
-        $(document).ready(function () {
-            $('.fancybox').fancybox()
-
-            toastr.options = {
-                "closeButton": false,
-                "debug": false,
-                "newestOnTop": false,
-                "progressBar": false,
-                "positionClass": "toast-top-right",
-                "preventDuplicates": false,
-                "onclick": null,
-                "showDuration": "500",
-                "hideDuration": "500",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            }
-        })
     </script>
 </head>
 
@@ -81,10 +59,33 @@
         </div>
     </div>
 {% endblock %}
-</body>
 
+<script>
+    $(document).ready(function () {
+        $('.fancybox').fancybox()
 
-<div class="cd-panel from-right">
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "500",
+            "hideDuration": "500",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    })
+
+</script>
+
+<div class="cd-panel from-left">
     <header class="cd-panel-header">
         <div>Settings</div>
         <a href="#0" class="cd-panel-close">Close</a>
@@ -96,4 +97,5 @@
     </div> <!-- cd-panel-container -->
 </div> <!-- cd-panel -->
 
+</body>
 </html>

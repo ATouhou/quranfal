@@ -3,7 +3,7 @@
  */
 
 
-function convert_aya_to_words(aya, display_word_meanings, learning, words_to_highlight) {
+function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highlight) {
     var meanings = word_meanings[aya.id]
     var sura_number = aya.attributes['data-sura'].value
     var aya_number = aya.attributes['data-aya'].value
@@ -21,15 +21,14 @@ function convert_aya_to_words(aya, display_word_meanings, learning, words_to_hig
         words_to_highlight.forEach(function (word_to_highlight) {
             if (remove_diacritics(word).indexOf(word_to_highlight) >= 0) { // word_to_highlight might be a substring of the word
                 word = '<span class="highlighted_word">' + word + '</span>'
-                // todo break loop here - if word highlighted once
             }
         })
 
-        if (display_word_meanings && !learning)
+        if (show_word_meanings && !learning)
             new_html += '<div class="word_wrapper" data-word="' + index + '">'
                 + '<div class="word">'
-                + '<a class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" target="_blank">' + word + '</a>'
-                + '</div><br><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
+                + '<a class="word" href="/quran/' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" target="_blank">' + word + '</a>'
+                + '</div><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
         else if (learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
                 + '<div class="study button"></div>'
@@ -40,7 +39,7 @@ function convert_aya_to_words(aya, display_word_meanings, learning, words_to_hig
         else
             new_html += '<div class="word_wrapper" data-word="' + index + '">'
                 + '<div class="word">'
-                + '<a class="word" href="{{base_url}}' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
+                + '<a class="word" href="/quran/' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
                 + '</div></div>'
     })
 

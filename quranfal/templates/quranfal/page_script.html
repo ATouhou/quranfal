@@ -9,13 +9,13 @@
     aya_groups.toArray().forEach(function (group) {
         var group_jq = $(group)
         var learning = group_jq.hasClass('learning')
-        var display_word_meanings = group_jq.hasClass('display-word-meanings')
+        var show_word_meanings = group_jq.hasClass('show-word-meanings')
 
         var ayas = group_jq.children('.aya_wrapper').children('.aya')
 
         ayas.toArray().forEach(function(aya){
                 var words_to_highlight = (words_to_highlight_in_aya[aya.id] || []).concat(words_to_highlight_in_page)
-                convert_aya_to_words(aya, display_word_meanings, learning, words_to_highlight)
+                convert_aya_to_words(aya, show_word_meanings, learning, words_to_highlight)
         })
     })
 
