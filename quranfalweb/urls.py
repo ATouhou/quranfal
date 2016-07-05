@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView
 
-from quranfal.views import LearningPageView, LearningMarkAya, LearningMarkWord, settings
+from quranfal.views import LearningPageView, LearningMarkAya, LearningMarkWord, settings, saved, frequent
+
 
 urlpatterns = [
 
@@ -33,7 +34,11 @@ urlpatterns = [
 
     url(r'^quran/settings/$', login_required(settings), name='learning_mark_word'),
 
+    url(r'^quran/study/saved/$', login_required(saved), name='learning_mark_word'),
+    url(r'^quran/study/frequent/$', login_required(frequent), name='learning_mark_word'),
+
     url(r'^quran/', include('quran.urls')),
+
 
     url(r'^', RedirectView.as_view(url='/quran/page/1/')),
 ]

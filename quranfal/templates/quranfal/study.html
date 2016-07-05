@@ -1,0 +1,122 @@
+{% load bootstrap3 %}
+
+{% if messages %}
+    <div>
+        {% for message in messages %}
+            {% bootstrap_alert message %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+{% if words|length %}
+    <div class="quickflip-wrapper-wrapper">
+        <div class="quickflip-wrapper" style="display: inline-block; width:300px;">
+            {% for word in words %}
+                <div class="front-panel" style="display: none;" data-word-id="{{ word.id }}"
+                     data-word-index="{{ forloop.counter }}">
+                    <h1>{{ word.text }}</h1>
+                    <div class="actionDiv">
+                        <a class="btn btn-success actionButton flipButton" href="#">Flip to Meaning</a>
+                    </div>
+                </div>
+
+                <div class="back-panel" style="display: none;" data-word-id="{{ word.id }}"
+                     data-word-index="{{ forloop.counter }}">
+                    <h1>{{ word.text }}</h1>
+                    <h3>{{ word.meaning.text }}</h3>
+                    <div class="actionDiv">
+                        <a class="btn btn-danger actionButton deleteButton" href="#">Delete</a>
+                        <a class="btn btn-info actionButton skipButton" href="#">Skip</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% else %}
+    <p>There are no words in your list!</p>
+    <script>
+        setTimeout("$.fancybox.close()", 2000);
+    </script>
+{% endif %}
+
+
+<script>
+    var panel_max =
+    {{ words|length }} *
+    2;
+    var panel_pointer = 0
+    var panels = new Array(panel_max).fill().map(function () {
+        return {deleted: false}
+    })
+
+    function show_panel() {
+        $('.quickflip-wrapper').quickFlipper({}, panel_pointer);
+    }
+
+    function show_next_panel() {
+        panel_pointer = next_panel_index()
+        show_panel()
+    }
+
+    function next_panel_index() {
+        panel_pointer = ++panel_pointer % panel_max
+        var trials = 0
+        while (panels[panel_pointer].deleted == true && trials < panel_max) {
+            panel_pointer = ++panel_pointer % panel_max
+            trials++
+        }
+
+        if (trials == panel_max) {
+            $.fancybox.close();
+            location.reload()
+        }
+
+        return panel_pointer
+    }
+
+    $(document).ready(function () {
+        show_panel()
+
+        $('.skipButton').on('click', function () {
+            show_next_panel()
+        })
+
+        $('.flipButton').on('click', function () {
+            show_next_panel()
+        })
+
+        $('.deleteButton').on('click', function () {
+            var word_index = $(this).parent().parent().attr('data-word-index')
+            var word_id = $(this).parent().parent().attr('data-word-id')
+
+            $.ajax({
+                type: 'POST',
+                url: '/quran/learning/word/',
+                data: {
+                    word_id: word_id,
+                    list: 2
+                },
+                success: function (message) {
+                    message = JSON.parse(message)
+                    toastr.remove()
+                    toastr['info'](message.message)
+
+                    panels[(word_index - 1) * 2].deleted = true
+                    panels[(word_index - 1) * 2 + 1].deleted = true
+                    show_next_panel()
+                },
+                error: function (message) {
+                    message = JSON.parse(message)
+                    alert(message.message)
+                    console.log(message)
+
+                    show_next_panel()
+                }
+            })
+        })
+
+    })
+
+</script>

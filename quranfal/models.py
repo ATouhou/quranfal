@@ -25,8 +25,8 @@ class UserSubscription(models.Model):
 
 
 class UserAya(UserSubscription):
-    aya = models.ForeignKey(Aya, related_name='userayas')
+    aya = models.ForeignKey(Aya, related_name='user_ayas')
 
 
 class UserWord(UserSubscription):
-    distinct_word = models.ForeignKey(DistinctWord, related_name='userwords')
+    distinct_word = models.ForeignKey(DistinctWord, related_name='user_words')

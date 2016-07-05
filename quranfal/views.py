@@ -1,5 +1,5 @@
 import json
-from django.db.models import Prefetch, Sum
+from django.db.models import Prefetch, Sum, Min
 from django import forms
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
@@ -26,23 +26,24 @@ class LearningPageView(TemplateView):
             context['learning'] = get_setting(self.request, 'learning')
             context['not_logged_in'] = False
             user = self.request.user
-            user_aya_qs = UserAya.objects.filter(user=user).select_related('list')
+            # user_aya_qs = UserAya.objects.filter(user=user).select_related('list')
             ayas = Aya.objects.filter(id__gte=page.aya_begin_id, id__lte=page.aya_end_id) \
-                .prefetch_related(prefetch_aya_translations(self.request),
-                                  Prefetch('userayas', queryset=user_aya_qs))  # filtering on membership table so prefetch membership table!
+                .prefetch_related(prefetch_aya_translations(self.request))  # filtering on membership table so prefetch membership table!
+                    # later: , Prefetch('user_ayas', queryset=user_aya_qs)
 
-            known_distinct_words = DistinctWord.objects.filter(userwords__user=user)
+            known_distinct_words = DistinctWord.objects.filter(user_words__user=user)
             user_words = Word.objects.filter(
                 aya_id__gte=page.aya_begin_id,
                 aya_id__lte=page.aya_end_id,
-                distinct_word__in=known_distinct_words).values_list('aya__sura_id', 'aya__number', 'number', 'distinct_word__userwords__list_id')
+                distinct_word__in=known_distinct_words)\
+                .values_list('aya__sura_id', 'aya__number', 'number', 'distinct_word__user_words__list_id')
             user_words = [list(word) for word in user_words]
         else:
             ayas = Aya.objects.filter(id__gte=page.aya_begin_id, id__lte=page.aya_end_id) \
                 .prefetch_related(prefetch_aya_translations(self.request))
 
         context['ayas'] = ayas
-        context['display_word_meanings'] = get_setting(self.request, 'display_word_meanings')
+        context['show_word_meanings'] = get_setting(self.request, 'show_word_meanings')
         context['user_words'] = json.dumps(user_words)
         context['page_number'] = int(page_number)
         return context
@@ -54,7 +55,7 @@ class LearningMarkAya(View):
         sura_number = request.POST.get('sura')
         aya_number = request.POST.get('aya')
         aya = Aya.objects.filter(sura_id=sura_number, number=aya_number).first()
-        user_aya = aya.userayas.filter(user=user).first()
+        user_aya = aya.user_ayas.filter(user=user).first()
         user_aya.list_id += 1
         return HttpResponse('User is created.<script>closeFancyBox(1000);location.reload();toastr.info("Are you the 6 fingered man?");</script>',
                             content_type='text/html')
@@ -79,13 +80,20 @@ class LearningMarkWord(View):
         return stats[index]
 
     def post(self, request, *args, **kwargs):
-        sura_number = request.POST.get('sura')
-        aya_number = request.POST.get('aya')
-        word_number = request.POST.get('word')
+
         list_id = request.POST.get('list')
+
+        if request.POST.get('word_id', None):
+            word_id = request.POST.get('word_id')
+            word = Word.objects.get(id=word_id)
+        else:
+            sura_number = request.POST.get('sura')
+            aya_number = request.POST.get('aya')
+            word_number = request.POST.get('word')
+            word = Word.objects.filter(sura_id=sura_number, aya__number=aya_number, number=word_number).first()
+
         list_name = List.objects.get(id=list_id).name.lower()
-        word = Word.objects.filter(sura_id=sura_number, aya__number=aya_number, number=word_number).first()
-        user_word = word.distinct_word.userwords.filter(user=self.request.user).first()
+        user_word = word.distinct_word.user_words.filter(user=self.request.user).first()
         deleted=False
         if user_word:
             old_stats = self.get_list_stats(user_word.list_id)
@@ -144,3 +152,16 @@ def settings(request):
         })
 
     return render(request, 'quranfal/settings.html', {'form': form})
+
+
+def saved(request):
+    uw = UserWord.objects.filter(user=request.user, list_id=2)
+    dw_id = uw.values_list('distinct_word_id', flat=True)
+    dw = DistinctWord.objects.filter(id__in=dw_id)
+    w_first_id = dw.annotate(first_word=Min('words')).values_list('first_word', flat=True)
+    w = Word.objects.filter(id__in=w_first_id)
+
+    return render(request, 'quranfal/study.html', {'words': w})
+
+def frequent(request):
+    pass
