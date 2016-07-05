@@ -1,0 +1,85 @@
+.quickflip-wrapper-wrapper{
+    text-align: center;
+    width: 400px;
+    height: 200px;
+
+}
+
+.quickflip-wrapper {
+    width: 312px;
+    height: 189px;
+    position: relative;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quickflip-wrapper .front-panel, .quickflip-wrapper .back-panel {
+    width: 312px;
+    height: 189px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url('../../quickflip-panel.jpg') no-repeat 0 0 #FFF;
+}
+
+.quickflip-wrapper .front-panel {
+    z-index: 10;
+}
+
+.quickflip-wrapper .back-panel {
+    background-position: -320px 0;
+}
+
+.quickflip-wrapper .inner-panel {
+    padding: 15px 30px;
+}
+
+div#content .quickflip-wrapper h3 {
+    font-size: 24px;
+    text-align: left;
+}
+
+.quickflip-wrapper .panel-content {
+    text-align: left;
+}
+
+.quickflip-wrapper .quickFlipCta {
+    cursor: pointer;
+}
+
+.quickflip-wrapper a.quickFlipCta {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 252px;
+    display: block;
+}
+
+.quickflip-wrapper .front-panel a.quickFlipCta {
+    color: #9c2f23;
+}
+
+.quickflip-wrapper .back-panel a.quickFlipCta {
+    color: #FFF;
+}
+
+#content .quickflip-wrapper a.quickFlipCta:hover {
+    text-decoration: underline;
+}
+
+.actionDiv {
+    display: block;
+    position: absolute;
+    bottom: 30px;
+    right: 95px;
+    text-align: center;
+}
+.actionButton {
+    color: white;
+}
+
+.actionButton:hover, .actionButton:focus{
+    color:  yellowgreen;
+    text-decoration: none;
+}
