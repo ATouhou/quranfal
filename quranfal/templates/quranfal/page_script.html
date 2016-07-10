@@ -41,7 +41,10 @@
             var word = div.parent().attr('data-word')
             var sura = div.parent().parent().attr('data-sura')
             var aya = div.parent().parent().attr('data-aya')
-            window.open('/quran/' + sura + '/' + aya + '/' + word + '/', '_blank');
+            if (word == "key")
+                window.open('/quran/' + sura + '/' + aya + '/', '_blank'); // open aya
+            else
+                window.open('/quran/' + sura + '/' + aya + '/' + word + '/', '_blank'); // open word
         })
 
         // ajax save for words in learning mode

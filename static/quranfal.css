@@ -8,7 +8,7 @@ div.word_wrapper[data-list="2"] div.known {
 }
 
 div.word_wrapper {
-    height: 80px;
+    position: relative;
 }
 
 div.word_wrapper div:hover {
@@ -16,38 +16,29 @@ div.word_wrapper div:hover {
 }
 
 div.word_wrapper div.study {
-    position: relative;
     height: 20px;
-    z-index: 1;
+    font-size:large;
 }
 
 div.word_wrapper div.word {
-    top: -10px;
-    position: relative;
     height: 50px;
 }
 
 div.word_wrapper div.details {
-    position: relative;
-    top: -65px;
-    height: 35px;
+    position: absolute;
+    top: 20px;    /* same as study height */
+    height: 50px; /* same as word height */
+    width: 100%;
 }
 
 div.word_wrapper div.known {
     position: relative;
-    top: -65px;
+    top: -10px;
     height: 30px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
     font-size:large;
 }
 
-/*this overrides word_meaning in quran.css*/
-div.word_wrapper .word_meaning {
-    font-size:large;
-    position: relative;
-    top: -20px;
-    height: 20px;
-}
 
 /* login screen ******************************************************************/
 
