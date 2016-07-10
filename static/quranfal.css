@@ -39,7 +39,14 @@ div.word_wrapper div.known {
     height: 30px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
     font-size:large;
+}
 
+/*this overrides word_meaning in quran.css*/
+div.word_wrapper .word_meaning {
+    font-size:large;
+    position: relative;
+    top: -20px;
+    height: 20px;
 }
 
 /* login screen ******************************************************************/

@@ -7,6 +7,8 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
     var meanings = word_meanings[aya.id]
     var sura_number = aya.attributes['data-sura'].value
     var aya_number = aya.attributes['data-aya'].value
+    var aya_href = aya.attributes['data-href'].value
+    var aya_translation = aya.attributes['data-translation'].value
     var old_html = aya.innerHTML
     var new_html = ''
     var words = old_html.trim().split(' ')
@@ -16,7 +18,6 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
     })
 
     words.forEach(function (word, index) {
-
         // highlight words if necessary
         words_to_highlight.forEach(function (word_to_highlight) {
             if (remove_diacritics(word).indexOf(word_to_highlight) >= 0) { // word_to_highlight might be a substring of the word
@@ -25,10 +26,13 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
         })
 
         if (show_word_meanings && !learning)
-            new_html += '<div class="word_wrapper" data-word="' + index + '">'
+            new_html +=
+                '<div class="word_wrapper" data-word="' + index + '">'
                 + '<div class="word">'
                 + '<a class="word" href="/quran/' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" target="_blank">' + word + '</a>'
-                + '</div><div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div></div>'
+                + '</div>'
+                + '<div class="word_meaning ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div>'
+                + '</div>'
         else if (learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
                 + '<div class="study button"></div>'
@@ -42,6 +46,26 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
                 + '<a class="word" href="/quran/' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
                 + '</div></div>'
     })
+
+    // add aya numeral
+    if (show_word_meanings && !learning)
+        new_html +=
+            '<div class="word_wrapper" data-word="key">'
+            + '<div class="word" title="&lrm;' + aya_translation + '&lrm;">'
+            + '<a class="word aya_numerals" href="/quran/' + sura_number + '/' + aya_number + '/" target="_blank">﴿' + arabic_numerals(aya_number) + '﴾</a>'
+            + '</div>'
+            + '<div class="word_meaning ltr_safe">|</div>'
+            + '</div>'
+    else if (learning)
+        new_html += '<div class="word_wrapper" data-word="key">'
+            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+            + '</div>'
+    else
+        new_html += '<div class="word_wrapper" data-word="key">'
+            + '<div class="word" title="&lrm;' + aya_translation + '&lrm;">'
+            + '<a class="word aya_numerals" href="/quran/' + sura_number + '/' + aya_number + '/" target="_blank">﴿' + arabic_numerals(aya_number) + '﴾</a>'
+            + '</div></div>'
+
 
     aya.innerHTML = new_html
 }
@@ -71,7 +95,6 @@ function csrfSafeMethod(method) {
 }
 
 jQuery(document).ready(function ($) {
-
     // ajax setup
     $.ajaxSetup({
         crossDomain: false, // obviates need for sameOrigin test
@@ -85,7 +108,6 @@ jQuery(document).ready(function ($) {
     //slide-in panel: open the  panel
     $('.cd-btn').on('click', function (event) {
         event.preventDefault()
-
         $.ajax({
             type: "GET",
             url: '/quran/settings/',
