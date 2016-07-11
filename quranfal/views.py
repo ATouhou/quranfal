@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView, View
 from quran.models import Page, Aya, Word, DistinctWord, Translation
-from quran.views import prefetch_aya_translations, get_setting
+from quran.views import prefetch_aya_translations
 from quranfal.models import UserAya, UserWord, List
 from django.http import HttpResponseRedirect
 
@@ -14,16 +14,33 @@ from django.http import HttpResponseRedirect
 class LearningPageView(TemplateView):
     template_name = 'quranfal/page.html'
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.page_number = 0
+
+    # sets cookie on response
+    def render_to_response(self, context, **response_kwargs):
+        response = super(LearningPageView, self).render_to_response(context, **response_kwargs)
+        response.set_cookie("page_number", self.page_number)
+        return response
+
     def get_context_data(self, page_number, **kwargs):
         context = super(LearningPageView, self).get_context_data(**kwargs)
 
+        if int(page_number) == 0:
+            page_number = get_setting(self.request, 'page_number')
+
+        self.page_number = page_number # to set cookie on response
+
         page = Page.objects.get(number=page_number)
 
-        context['show_learning'] = False
+        context['can_mark_known_words'] = False
+        context['can_mark_unknown_words'] = False
         user_words = []
         context['not_logged_in'] = True
         if self.request.user.is_authenticated():
-            context['show_learning'] = get_setting(self.request, 'show_learning')
+            context['can_mark_known_words'] = get_setting(self.request, 'can_mark_known_words')
+            context['can_mark_unknown_words'] = get_setting(self.request, 'can_mark_unknown_words')
             context['not_logged_in'] = False
             user = self.request.user
             # user_aya_qs = UserAya.objects.filter(user=user).select_related('list')
@@ -138,18 +155,21 @@ class SettingsForm(forms.Form):
     translation_type = forms.ChoiceField(choices=[(t.id, t.text) for t in Translation.objects.all()])
     show_translation = forms.BooleanField(required=False)
     show_word_meanings = forms.BooleanField(required=False)
-    show_learning = forms.BooleanField(required=False)
+    can_mark_known_words = forms.BooleanField(required=False)
+    can_mark_unknown_words = forms.BooleanField(required=False)
 
 
 def settings(request):
     if request.method == 'POST':
         form = SettingsForm(request.POST)
         if form.is_valid():
-            request.session['translation_type'] = form.cleaned_data['translation_type']
-            request.session['show_translation'] = form.cleaned_data['show_translation']
-            request.session['show_word_meanings'] = form.cleaned_data['show_word_meanings']
-            request.session['show_learning'] = form.cleaned_data['show_learning']
-            return HttpResponseRedirect('/quran/page/6/')
+            response = HttpResponseRedirect('/quran/page/0/')
+            response.set_cookie('translation_type', form.cleaned_data['translation_type'])
+            response.set_cookie('show_translation', form.cleaned_data['show_translation'])
+            response.set_cookie('show_word_meanings', form.cleaned_data['show_word_meanings'])
+            response.set_cookie('can_mark_known_words', form.cleaned_data['can_mark_known_words'])
+            response.set_cookie('can_mark_unknown_words', form.cleaned_data['can_mark_unknown_words'])
+            return response
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -157,10 +177,15 @@ def settings(request):
             'translation_type': get_setting(request, 'translation_type'),
             'show_translation': get_setting(request, 'show_translation'),
             'show_word_meanings': get_setting(request, 'show_word_meanings'),
-            'show_learning': get_setting(request, 'show_learning'),
+            'can_mark_known_words': get_setting(request, 'can_mark_known_words'),
+            'can_mark_unknown_words': get_setting(request, 'can_mark_unknown_words'),
         })
 
-    return render(request, 'quranfal/settings.html', {'form': form})
+        not_logged_in = True
+        if request.user.is_authenticated():
+            not_logged_in = False
+
+    return render(request, 'quranfal/settings.html', {'form': form, 'not_logged_in': not_logged_in})
 
 
 def saved(request):
@@ -175,3 +200,23 @@ def saved(request):
 
 def frequent(request):
     pass
+
+
+# default settings
+default_settings = {
+    'translation_type': 2, #Translation.objects.first().id, # problem for migrating to another server
+    'show_translation': True,
+    'show_word_meanings': True,
+    'can_mark_known_words': True,
+    'can_mark_unknown_words': True,
+    'page_number': 1,
+}
+
+def get_setting(request, setting):
+    if setting in request.COOKIES:
+        if request.COOKIES[setting] == 'False':
+            return False
+        if request.COOKIES[setting] == 'None':
+            return None
+        return request.COOKIES[setting]
+    return default_settings[setting]

@@ -8,7 +8,8 @@
     var aya_groups = $('div.aya_group')
     aya_groups.toArray().forEach(function (group) {
         var group_jq = $(group)
-        var show_learning = group_jq.hasClass('show-learning')
+        var can_mark_known_words = group_jq.hasClass('can-mark-known-words')
+        var can_mark_unknown_words = group_jq.hasClass('can-mark-unknown-words')
         var show_word_meanings = group_jq.hasClass('show-word-meanings')
         var show_translation = group_jq.hasClass('show-translation')
 
@@ -16,7 +17,7 @@
 
         ayas.toArray().forEach(function(aya){
                 var words_to_highlight = (words_to_highlight_in_aya[aya.id] || []).concat(words_to_highlight_in_page)
-                convert_aya_to_words(aya, show_word_meanings, show_learning, show_translation, words_to_highlight)
+                convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight)
         })
     })
 
@@ -48,7 +49,7 @@
         })
 
         // ajax save for words in learning mode
-        $('.show-learning div.button').on('click', function (event) {
+        $('.can-mark-known-words div.lower, .can-mark-unknown-words div.upper').on('click', function (event) {
             var div = $(event.target)
             var word = div.parent().attr('data-word')
             var sura = div.parent().parent().attr('data-sura')

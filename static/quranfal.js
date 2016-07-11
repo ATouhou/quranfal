@@ -3,7 +3,7 @@
  */
 
 
-function convert_aya_to_words(aya, show_word_meanings, show_learning, show_translation, words_to_highlight) {
+function convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight) {
     var meanings = word_meanings[aya.id]
     var sura_number = aya.attributes['data-sura'].value
     var aya_number = aya.attributes['data-aya'].value
@@ -28,54 +28,37 @@ function convert_aya_to_words(aya, show_word_meanings, show_learning, show_trans
             }
         })
 
-        if (show_word_meanings && !show_learning)
-            new_html +=
-                '<div class="word_wrapper" data-word="' + (index + 1) + '">'
-                + '<div class="word">' + word + '</div>'
-                + '<div class="lower button ltr_safe side-border">&nbsp;' + meanings[index] + '&nbsp;</div>'
-                + '</div>'
-        else if (show_word_meanings && show_learning)
-            new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
-                + '<div class="upper button"></div>'
-                + '<div class="word">' + word + '</div>'
-                + '<div class="lower button ltr_safe side-border">&nbsp;' + meanings[index] + '&nbsp;</div>'
-                + '</div>'
-        else if (show_learning)
-            new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
-                + '<div class="upper button"></div>'
-                + '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
-                + '<div class="lower button sidebo"></div>'
-                + '</div>'
-        else
-            new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
-                + '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
-                + '</div>'
+        new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
+        if (can_mark_unknown_words)
+            new_html += '<div class="upper button"></div>'
+
+        if (show_word_meanings) {
+            new_html += '<div class="word">' + word + '</div>'
+            new_html += '<div class="lower button side-border ltr_safe">&nbsp;' + meanings[index] + '&nbsp;</div>'
+        }
+        else {
+            new_html += '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
+            if (can_mark_known_words)
+                new_html += '<div class="lower button"></div>'
+        }
+        new_html += '</div>'
     })
 
     // add aya numeral
-    if (show_word_meanings && !show_learning)
-        new_html +=
-            '<div class="word_wrapper" data-word="key">'
-            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
-            + '<div class="lower button ltr_safe"></div>'
-            + '</div>'
-    else if (show_word_meanings && show_learning)
-        new_html += '<div class="word_wrapper" data-word="key">'
-            + '<div class="upper button"></div>'
-            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
-            + '<div class="lower button ltr_safe"></div>'
-            + '</div>'
-    else if (show_learning)
-        new_html += '<div class="word_wrapper" data-word="key">'
-            + '<div class="upper button"></div>'
-            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
-            + '<div class="lower button"></div>'
-            + '</div>'
-    else
-        new_html += '<div class="word_wrapper" data-word="key">'
-            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
-            + '</div>'
+    new_html += '<div class="word_wrapper" data-word="key">'
+    if (can_mark_unknown_words)
+        new_html += '<div class="upper button"></div>'
 
+    if (show_word_meanings) {
+        new_html += '<div class="word aya_numerals">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+        new_html += '<div class="lower button side-border ltr_safe"></div>'
+    }
+    else {
+        new_html += '<div class="word aya_numerals">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+        if (can_mark_known_words)
+            new_html += '<div class="lower button"></div>'
+    }
+    new_html += '</div>'
 
     aya.innerHTML = new_html
 }

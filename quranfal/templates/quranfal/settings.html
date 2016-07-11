@@ -1,44 +1,57 @@
-
 {% load bootstrap3 %}
 
 <form action="/quran/settings/" method="post">
     {% csrf_token %}
-    {%  bootstrap_form form %}
+    {% bootstrap_form form %}
 
     <a href="#" id="beginner">beginner</a>
     | <a href="#" id="intermediate">intermediate</a>
-    | <a href="#" id="advanced">advanced</a>
+    | <a href="#" id="advanced">advanced</a> (Must finish Quran once at each level.)
     <br>
     <br>
-    <input type="submit" value="Submit" />
+    {% if not_logged_in %}
+        You must log in to be able to mark words as known or unknown!
+        <br>
+        <br>
+    {% endif %}
+    <input type="submit" value="Submit"/>
+    <br><br>
+    Note: If "Show word meanings" option is not selected, word meanings can still be seen on-demand by hovering mouse over the word.
+    However, since hovering is not available on touch devices, this option might be manually enabled even if not suggested for the level.
 </form>
 
 <script>
 
-    $(document).ready(function(){
-        $('a#beginner').on('click', function(){
+    $(document).ready(function () {
+        $('a#beginner').on('click', function () {
             $('#id_show_translation').attr('checked', true)
             $('#id_show_translation').prop('checked', true)
             $('#id_show_word_meanings').attr('checked', true)
             $('#id_show_word_meanings').prop('checked', true)
-            $('#id_show_learning').attr('checked', true)
-            $('#id_show_learning').prop('checked', true)
+            $('#id_can_mark_known_words').attr('checked', false)
+            $('#id_can_mark_known_words').prop('checked', false)
+            $('#id_can_mark_unknown_words').attr('checked', false)
+            $('#id_can_mark_unknown_words').prop('checked', false)
         })
-        $('a#intermediate').on('click', function(){
+        $('a#intermediate').on('click', function () {
             $('#id_show_translation').attr('checked', false)
             $('#id_show_translation').prop('checked', false)
             $('#id_show_word_meanings').attr('checked', true)
             $('#id_show_word_meanings').prop('checked', true)
-            $('#id_show_learning').attr('checked', true)
-            $('#id_show_learning').prop('checked', true)
+            $('#id_can_mark_known_words').attr('checked', true)
+            $('#id_can_mark_known_words').prop('checked', true)
+            $('#id_can_mark_unknown_words').attr('checked', false)
+            $('#id_can_mark_unknown_words').prop('checked', false)
         })
-        $('a#advanced').on('click', function(){
+        $('a#advanced').on('click', function () {
             $('#id_show_translation').attr('checked', false)
             $('#id_show_translation').prop('checked', false)
             $('#id_show_word_meanings').attr('checked', false)
             $('#id_show_word_meanings').prop('checked', false)
-            $('#id_show_learning').attr('checked', true)
-            $('#id_show_learning').prop('checked', true)
+            $('#id_can_mark_known_words').attr('checked', true)
+            $('#id_can_mark_known_words').prop('checked', true)
+            $('#id_can_mark_unknown_words').attr('checked', true)
+            $('#id_can_mark_unknown_words').prop('checked', true)
         })
     })
 
