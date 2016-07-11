@@ -12,6 +12,8 @@
 
     {% if learning %}
         <script> var user_words = {{ user_words | safe }}</script>
+    {% else %}
+        <script> var user_words = []</script>
     {% endif %}
 
     <div class="page_container">

@@ -27,61 +27,51 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
 
         if (show_word_meanings && !learning)
             new_html +=
-                '<div class="word_wrapper" data-word="' + index + '">'
-                + '<div class="word">'
-                + '<a class="word" href="/quran/' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" target="_blank">' + word + '</a>'
-                + '</div>'
-                + '<div class="known button ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div>'
+                '<div class="word_wrapper" data-word="' + (index + 1) + '">'
+                + '<div class="word">' + word + '</div>'
+                + '<div class="lower button ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div>'
                 + '</div>'
         else if (show_word_meanings && learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
-                + '<div class="study button"></div>'
+                + '<div class="upper button"></div>'
                 + '<div class="word">' + word + '</div>'
-                + '<div class="details"></div>'
-                + '<div class="known button ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div>'
+                + '<div class="lower button ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div>'
                 + '</div>'
         else if (learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
-                + '<div class="study button"></div>'
-                + '<div class="word">' + word + '</div>'
-                + '<div class="details" title="&lrm;' + meanings[index] + '&lrm;"></div>'
-                + '<div class="known button"></div>'
+                + '<div class="upper button"></div>'
+                + '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
+                + '<div class="lower button"></div>'
                 + '</div>'
         else
-            new_html += '<div class="word_wrapper" data-word="' + index + '">'
-                + '<div class="word">'
-                + '<a class="word" href="/quran/' + sura_number + '/' + aya_number + '/' + (index + 1) + '/" title="&lrm;' + meanings[index] + '&lrm;" target="_blank">' + word + '</a>'
-                + '</div></div>'
+            new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
+                + '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
+                + '</div>'
     })
 
     // add aya numeral
     if (show_word_meanings && !learning)
         new_html +=
             '<div class="word_wrapper" data-word="key">'
-            + '<div class="word">'
-            + '<a class="word aya_numerals" href="/quran/' + sura_number + '/' + aya_number + '/" target="_blank"  title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</a>'
-            + '</div>'
-            + '<div class="known button ltr_safe">&nbsp;|</div>'
+            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+            + '<div class="lower button ltr_safe"></div>'
             + '</div>'
     else if (show_word_meanings && learning)
         new_html += '<div class="word_wrapper" data-word="key">'
-            + '<div class="study button"></div>'
-            + '<div class="word aya_numerals">﴿' + arabic_numerals(aya_number) + '﴾</div>'
-            + '<div class="details" title="&lrm;' + aya_translation + '&lrm;"></div>'
-            + '<div class="known button ltr_safe">&nbsp;&nbsp;|</div>'
+            + '<div class="upper button"></div>'
+            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+            + '<div class="lower button ltr_safe"></div>'
             + '</div>'
     else if (learning)
         new_html += '<div class="word_wrapper" data-word="key">'
-            + '<div class="study button"></div>'
-            + '<div class="word aya_numerals">﴿' + arabic_numerals(aya_number) + '﴾</div>'
-            + '<div class="details" title="&lrm;' + aya_translation + '&lrm;"></div>'
-            + '<div class="known button"></div>'
+            + '<div class="upper button"></div>'
+            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+            + '<div class="lower button"></div>'
             + '</div>'
     else
         new_html += '<div class="word_wrapper" data-word="key">'
-            + '<div class="word">'
-            + '<a class="word aya_numerals" href="/quran/' + sura_number + '/' + aya_number + '/" title="&lrm;' + aya_translation + '&lrm;" target="_blank">﴿' + arabic_numerals(aya_number) + '﴾</a>'
-            + '</div></div>'
+            + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+            + '</div>'
 
 
     aya.innerHTML = new_html

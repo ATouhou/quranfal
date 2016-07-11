@@ -1,9 +1,9 @@
 
-div.word_wrapper[data-list="1"] div.known {
+div.word_wrapper[data-list="1"] div.lower {
     background-color: rgba(105, 215, 40, 0.22);
 }
 
-div.word_wrapper[data-list="2"] div.known {
+div.word_wrapper[data-list="2"] div.lower {
     background-color: rgba(222, 160, 64, 0.41);
 }
 
@@ -15,7 +15,7 @@ div.word_wrapper div:hover {
     background-color: rgba(199, 215, 37, 0.11);
 }
 
-div.word_wrapper div.study {
+div.word_wrapper div.upper {
     height: 20px;
     font-size:large;
 }
@@ -24,14 +24,7 @@ div.word_wrapper div.word {
     height: 50px;
 }
 
-div.word_wrapper div.details {
-    position: absolute;
-    top: 20px;    /* same as study height */
-    height: 50px; /* same as word height */
-    width: 100%;
-}
-
-div.word_wrapper div.known {
+div.word_wrapper div.lower {
     position: relative;
     top: -10px;
     height: 30px;

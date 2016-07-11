@@ -36,7 +36,7 @@
         })
 
         // open word details on click
-        $('div.learning div.details').on('click', function (event) {
+        $('.word').on('click', function (event) {
             var div = $(event.target)
             var word = div.parent().attr('data-word')
             var sura = div.parent().parent().attr('data-sura')
@@ -63,7 +63,7 @@
                     sura: sura,
                     aya: aya,
                     word: word,
-                    list: div.hasClass('known') ? 1 : 2
+                    list: div.hasClass('lower') ? 1 : 2
                 },
                 success: function (message) {
                     message = JSON.parse(message)
