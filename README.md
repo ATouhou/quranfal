@@ -1,21 +1,23 @@
 
 # About
 - Quranfal is a Quran web application written in django and aims to facilitate learning Quran's language while reading it.
-- Currently live at [www.quran4.me](quran4.me)
+- Currently live at [www.quranicjourney.com](quranicjourney.com)
 
 # Features
 - Mark known words and get a report of its frequency in Quran, and what percentage of Quran is understood. 
-- Add words to 'study' list
+- Add unknown words to 'study' list
+- Flash card tool to study words added to 'study' list
 - Click on a word to see all of its occurrences in Quran
 - See morphological information of the words (data from quran.corpus.com). Click on its lemma, to see all related words and ayas in the Quran. Similarly, click on its root, to see all related lemmas, words and ayas. 
 - Word by word meaning (English only for now)
 - Several translations 
+- Settings organized as beginner-intermediate-advanced
 
 # To Do
-- A tool to study words added to 'study' list
-- Make it more mobile friendly
-- Settings page
 - Add grammatical information related to morphological structures
+- Quranic word's relatives in other languages
+- Add tafseer
+- Add tafseer (user contributions)
 - Add word-by-word meanings and translations in other languages
 - A regexp tool to filter or highlight certain language constructs
 
