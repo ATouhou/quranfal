@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^quran/learning/aya/$', login_required(LearningMarkAya.as_view()), name='learning_mark_aya'),
     url(r'^quran/learning/word/$', login_required(LearningMarkWord.as_view()), name='learning_mark_word'),
 
-    url(r'^quran/settings/$', login_required(settings), name='learning_mark_word'),
+    url(r'^quran/settings/$', settings, name='learning_mark_word'),
 
     url(r'^quran/study/saved/$', login_required(saved), name='learning_mark_word'),
     url(r'^quran/study/frequent/$', login_required(frequent), name='learning_mark_word'),
@@ -40,5 +40,5 @@ urlpatterns = [
     url(r'^quran/', include('quran.urls')),
 
 
-    url(r'^', RedirectView.as_view(url='/quran/page/1/')),
+    url(r'^', RedirectView.as_view(url='/quran/page/0/')),
 ]

@@ -10,7 +10,7 @@
     <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Serif" rel="stylesheet" type="text/css">
     {% load quran %}
 
-    {% if show_learning %}
+    {% if can_mark_known_words %}
         <script> var user_words = {{ user_words | safe }}</script>
     {% else %}
         <script> var user_words = []</script>
@@ -19,12 +19,14 @@
     <div class="page_container">
 
         <div class="login_notification">
+            <a href="#0" class="cd-btn">settings</a>
             {% if not_logged_in %}
-                You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
+                | You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
             {% else %}
-                <a href="/accounts/logout/">log out</a>
-                | <a href="#0" class="cd-btn">settings</a>
+                | <a href="/accounts/logout/">log out</a>
+                {% if can_mark_unknown_words %}
                 | <a href="/quran/study/saved/" class="fancybox fancybox.ajax">words saved</a>
+                {% endif %}
             {% endif %}
         </div>
 
@@ -35,7 +37,7 @@
                         <div class="wire_frame" style="padding: 3px;">
                             <div class="page wire_frame" style="padding: 10px;">
 
-                                <div class="aya_group{{ show_learning|yesno:" show-learning," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
+                                <div class="aya_group{{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
                                     {% for aya in ayas %}
 
                                         {% if aya.bismillah %}
