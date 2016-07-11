@@ -46,17 +46,17 @@ function convert_aya_to_words(aya, show_translation, show_word_meanings, can_mar
 
     // add aya numeral
     new_html += '<div class="word_wrapper" data-word="key">'
-    if (can_mark_unknown_words)
-        new_html += '<div class="upper button"></div>'
+    // if (can_mark_unknown_words)
+    //     new_html += '<div class="upper button"></div>'
 
     if (show_word_meanings) {
-        new_html += '<div class="word aya_numerals">﴿' + arabic_numerals(aya_number) + '﴾</div>'
+        new_html += '<div class="word aya_numerals"' + (show_translation ? '' : ' title="' + aya_translation.replace(/"/g, '&quot;') + '"') + '>﴿' + arabic_numerals(aya_number) + '﴾</div>'
         new_html += '<div class="lower button side-border ltr_safe"></div>'
     }
     else {
-        new_html += '<div class="word aya_numerals">﴿' + arabic_numerals(aya_number) + '﴾</div>'
-        if (can_mark_known_words)
-            new_html += '<div class="lower button"></div>'
+        new_html += '<div class="word aya_numerals"' + (show_translation ? '' : ' title="' + aya_translation.replace(/"/g, '&quot;') + '"') + '>﴿' + arabic_numerals(aya_number) + '﴾</div>'
+        // if (can_mark_known_words)
+        //     new_html += '<div class="lower button"></div>'
     }
     new_html += '</div>'
 
