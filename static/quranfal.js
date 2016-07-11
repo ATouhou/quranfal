@@ -17,6 +17,9 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
         return remove_diacritics(word)
     })
 
+    if (show_translation)
+        new_html += '<div class="translation">' + aya_translation + '</div>'
+
     words.forEach(function (word, index) {
         // highlight words if necessary
         words_to_highlight.forEach(function (word_to_highlight) {
@@ -29,13 +32,13 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
             new_html +=
                 '<div class="word_wrapper" data-word="' + (index + 1) + '">'
                 + '<div class="word">' + word + '</div>'
-                + '<div class="lower button ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div>'
+                + '<div class="lower button ltr_safe side-border">&nbsp;' + meanings[index] + '&nbsp;</div>'
                 + '</div>'
         else if (show_word_meanings && learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
                 + '<div class="upper button"></div>'
                 + '<div class="word">' + word + '</div>'
-                + '<div class="lower button ltr_safe">&nbsp;' + meanings[index] + '&nbsp;|</div>'
+                + '<div class="lower button ltr_safe side-border">&nbsp;' + meanings[index] + '&nbsp;</div>'
                 + '</div>'
         else if (learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'

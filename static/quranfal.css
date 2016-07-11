@@ -17,7 +17,6 @@ div.word_wrapper div:hover {
 
 div.word_wrapper div.upper {
     height: 20px;
-    font-size:large;
 }
 
 div.word_wrapper div.word {
@@ -29,9 +28,22 @@ div.word_wrapper div.lower {
     top: -10px;
     height: 30px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
-    font-size:large;
 }
 
+.translation {
+    font-family: Arial;
+    font-size: large;
+    text-align: left;
+}
+
+.button {
+    font-family: Arial;
+    font-size:small;
+}
+
+.side-border {
+    border-left: 1px solid rgba(97, 198, 37, 0.5);
+}
 
 /* login screen ******************************************************************/
 
