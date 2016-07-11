@@ -3,7 +3,7 @@
  */
 
 
-function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highlight) {
+function convert_aya_to_words(aya, show_word_meanings, show_learning, show_translation, words_to_highlight) {
     var meanings = word_meanings[aya.id]
     var sura_number = aya.attributes['data-sura'].value
     var aya_number = aya.attributes['data-aya'].value
@@ -28,23 +28,23 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
             }
         })
 
-        if (show_word_meanings && !learning)
+        if (show_word_meanings && !show_learning)
             new_html +=
                 '<div class="word_wrapper" data-word="' + (index + 1) + '">'
                 + '<div class="word">' + word + '</div>'
                 + '<div class="lower button ltr_safe side-border">&nbsp;' + meanings[index] + '&nbsp;</div>'
                 + '</div>'
-        else if (show_word_meanings && learning)
+        else if (show_word_meanings && show_learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
                 + '<div class="upper button"></div>'
                 + '<div class="word">' + word + '</div>'
                 + '<div class="lower button ltr_safe side-border">&nbsp;' + meanings[index] + '&nbsp;</div>'
                 + '</div>'
-        else if (learning)
+        else if (show_learning)
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
                 + '<div class="upper button"></div>'
                 + '<div class="word" title="&lrm;' + meanings[index] + '&lrm;">' + word + '</div>'
-                + '<div class="lower button"></div>'
+                + '<div class="lower button sidebo"></div>'
                 + '</div>'
         else
             new_html += '<div class="word_wrapper" data-word="' + (index + 1) + '">'
@@ -53,19 +53,19 @@ function convert_aya_to_words(aya, show_word_meanings, learning, words_to_highli
     })
 
     // add aya numeral
-    if (show_word_meanings && !learning)
+    if (show_word_meanings && !show_learning)
         new_html +=
             '<div class="word_wrapper" data-word="key">'
             + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
             + '<div class="lower button ltr_safe"></div>'
             + '</div>'
-    else if (show_word_meanings && learning)
+    else if (show_word_meanings && show_learning)
         new_html += '<div class="word_wrapper" data-word="key">'
             + '<div class="upper button"></div>'
             + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'
             + '<div class="lower button ltr_safe"></div>'
             + '</div>'
-    else if (learning)
+    else if (show_learning)
         new_html += '<div class="word_wrapper" data-word="key">'
             + '<div class="upper button"></div>'
             + '<div class="word aya_numerals" title="&lrm;' + aya_translation + '&lrm;">﴿' + arabic_numerals(aya_number) + '﴾</div>'

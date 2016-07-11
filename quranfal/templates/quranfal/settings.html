@@ -4,5 +4,42 @@
 <form action="/quran/settings/" method="post">
     {% csrf_token %}
     {%  bootstrap_form form %}
+
+    <a href="#" id="beginner">beginner</a>
+    | <a href="#" id="intermediate">intermediate</a>
+    | <a href="#" id="advanced">advanced</a>
+    <br>
+    <br>
     <input type="submit" value="Submit" />
 </form>
+
+<script>
+
+    $(document).ready(function(){
+        $('a#beginner').on('click', function(){
+            $('#id_show_translation').attr('checked', true)
+            $('#id_show_translation').prop('checked', true)
+            $('#id_show_word_meanings').attr('checked', true)
+            $('#id_show_word_meanings').prop('checked', true)
+            $('#id_show_learning').attr('checked', true)
+            $('#id_show_learning').prop('checked', true)
+        })
+        $('a#intermediate').on('click', function(){
+            $('#id_show_translation').attr('checked', false)
+            $('#id_show_translation').prop('checked', false)
+            $('#id_show_word_meanings').attr('checked', true)
+            $('#id_show_word_meanings').prop('checked', true)
+            $('#id_show_learning').attr('checked', true)
+            $('#id_show_learning').prop('checked', true)
+        })
+        $('a#advanced').on('click', function(){
+            $('#id_show_translation').attr('checked', false)
+            $('#id_show_translation').prop('checked', false)
+            $('#id_show_word_meanings').attr('checked', false)
+            $('#id_show_word_meanings').prop('checked', false)
+            $('#id_show_learning').attr('checked', true)
+            $('#id_show_learning').prop('checked', true)
+        })
+    })
+
+</script>

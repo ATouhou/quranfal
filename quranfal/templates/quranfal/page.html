@@ -10,7 +10,7 @@
     <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Serif" rel="stylesheet" type="text/css">
     {% load quran %}
 
-    {% if learning %}
+    {% if show_learning %}
         <script> var user_words = {{ user_words | safe }}</script>
     {% else %}
         <script> var user_words = []</script>
@@ -35,7 +35,7 @@
                         <div class="wire_frame" style="padding: 3px;">
                             <div class="page wire_frame" style="padding: 10px;">
 
-                                <div class="aya_group{{ learning|yesno:" learning," }}{{ show_word_meanings|yesno:" show-word-meanings," }}">
+                                <div class="aya_group{{ show_learning|yesno:" show-learning," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
                                     {% for aya in ayas %}
 
                                         {% if aya.bismillah %}
