@@ -5,7 +5,7 @@ upstream django {
 
 server {
     listen 80 default_server;
-    server_name www.quran4.me quran4.me 0.0.0.0;
+    server_name www.quran4.me quran4.me 0.0.0.0 www.quranicjourney.com quranicjourney.com;
 
     location = /favicon.ico {
         access_log off;
