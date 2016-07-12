@@ -5,9 +5,8 @@ from django.db.models.functions import Coalesce
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView, View
-from quran.models import Page, Aya, Word, DistinctWord, Translation
-from quran.views import prefetch_aya_translations
-from quranfal.models import UserAya, UserWord, List
+from quran.models import Page, Aya, Word, DistinctWord, Translation, AyaTranslation
+from quranfal.models import UserWord, List
 from django.http import HttpResponseRedirect
 
 
@@ -212,6 +211,7 @@ default_settings = {
     'page_number': 1,
 }
 
+
 def get_setting(request, setting):
     if setting in request.COOKIES:
         if request.COOKIES[setting] == 'False':
@@ -220,3 +220,8 @@ def get_setting(request, setting):
             return None
         return request.COOKIES[setting]
     return default_settings[setting]
+
+
+def prefetch_aya_translations(request):
+    translation_id = get_setting(request, 'translation_type')
+    return Prefetch('translations', queryset=AyaTranslation.objects.filter(translation_id=translation_id))
