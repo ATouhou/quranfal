@@ -10,7 +10,6 @@
     <title>Holy Qur'an</title>
 
     <link rel="stylesheet" href="{% static 'quranfal.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'quran/quran.css' %}" type="text/css"/>
 
     <script src="{% static 'quran/quran.js' %}"></script>
 
@@ -30,6 +29,7 @@
         var word_meanings = {}
         var words_to_highlight_in_aya = {}
         var words_to_highlight_in_page = []
+        var user_words = []
     </script>
 </head>
 
@@ -47,8 +47,28 @@
     </div>
 {% endif %}
 
-{% block body %}
-{% endblock %}
+<div class="page_container">
+
+    {% if can_mark_known_words and user_words %}
+        <script> user_words = {{ user_words | safe }}</script>
+    {% endif %}
+
+
+    <div class="login_notification">
+        <a href="#0" class="cd-btn">settings</a>
+        {% if not_logged_in %}
+            | You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
+        {% else %}
+            | <a href="/accounts/logout/">log out</a>
+            {% if can_mark_unknown_words %}
+                | <a href="/quran/study/saved/" class="fancybox fancybox.ajax">words saved</a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    {% block body %}
+    {% endblock %}
+</div>
 
 {% block footer %}
     <div class="page_container">

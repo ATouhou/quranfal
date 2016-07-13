@@ -1,3 +1,200 @@
+@font-face {
+    font-family: KFGQPC_Naskh;
+    src: url(/static/quran/fonts/kfc_naskh.otf) format("truetype")
+}
+
+@font-face {
+    font-family: Me-Quran;
+    src: url(/static/quran/fonts/me_quran.ttf) format("truetype")
+}
+
+@font-face {
+    font-family: Scheherazade;
+    src: url(/static/quran/fonts/scheherazade.ttf) format("truetype")
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #f2f2f2;
+
+}
+
+div.page_container {
+    max-width:980px;
+    margin: 10px;
+}
+
+div.word_wrapper{
+    display:inline-block;
+}
+
+div.word {
+    margin-left: 20px;
+    display:inline-block;
+}
+
+a.word {
+    text-decoration: none;
+    color: black
+}
+
+a.word:hover {
+    background: rgba(105, 215, 40, 0.22);
+    text-decoration: none;
+}
+
+div.word_meaning {
+    font-size:large;
+}
+
+.wire_frame {
+    border: 1px solid
+}
+
+.outer_frame {
+    border:solid 5px #BA5428;
+}
+
+.inner_frame {
+    border: 10px solid #d8c397;
+}
+
+a.blank_link {
+    text-decoration: none;
+    color:inherit;
+}
+
+div.header {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+div.dark-box {
+    color: white;
+    background: #7a4a11;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #dddddd;
+}
+
+div.light-box,
+div.grammar-box {
+    background: rgba(216, 195, 152, 0.39);
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #dddddd;
+}
+
+div.grammar-box {
+    text-align: center;
+    font-size:1.5em;
+}
+
+div.grammar-box .highlighted_word {
+    font-weight: bold;
+}
+
+div.dark-box .highlighted_word {
+    color: rgb(255, 147, 127);
+}
+
+div.dark-box .blank_link:hover {
+    color: rgb(255, 147, 127);
+    text-decoration: none;
+}
+
+div.white-box a.blank_link:hover {
+    background: rgba(216, 195, 152, 0.52);
+    text-decoration: none;
+}
+
+
+div.white-box {
+    background-color: rgba(240, 240, 240, 0.50);
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #e6e6e6;
+}
+
+span.key {
+    padding: 3px;
+    font-size: .6em;
+    border: 1px silver;
+    background: rgba(216, 195, 152, 0.39);
+    margin-right: 5px;
+    float: left;
+
+}
+
+.highlighted_word,
+div.light-box .highlighted_word {
+    color:crimson;
+}
+
+div#index {
+    margin-left: 50px;
+    font-size: 2em;
+}
+
+div.page {
+    direction: rtl;
+    background-color: rgba(245, 243, 241, 0.64);
+}
+
+div.aya_group {
+    font-family: Scheherazade;
+    font-size: 3em;
+    font-weight: normal;
+}
+
+.aya_numerals {
+    text-decoration: none;
+    color: gray !important;
+    font-size: .8em;
+}
+
+div.page div.sura-header {
+    background: url('/static/header_contrasted22.svg') no-repeat center center;
+    background-size: 100%;
+    text-align: center;
+    padding: 1em;
+    font-size: 1em;
+
+}
+
+div.bismillah {
+    text-align: center;
+    margin: 0.10em;
+}
+
+.ltr_safe::after{
+    content: '\200E';
+    /* &lrm; character */
+}
+.ltr_safe::before{
+    content: '\200E';
+    /* &lrm; character */
+}
+
+.rtl_safe::after{
+    content: '\200F';
+    /* &rlm; character */
+}
+.rtl_safe::before{
+    content: '\200F';
+    /* &rlm; character */
+}
+
+div.page_controls {
+    text-align: center;
+    max-width: 130px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/********************************************************************/
 
 div.word_wrapper[data-list="1"] div.lower {
     background-color: rgba(105, 215, 40, 0.22);
@@ -28,12 +225,25 @@ div.word_wrapper div.lower {
     top: -10px;
     height: 30px;
     border-bottom: 1px solid rgba(105, 215, 40, 0.22);
+    padding-top: 10px;
 }
 
 .translation {
     font-family: Arial;
+    color: rgb(127, 74, 5);
     font-size: large;
-    text-align: left;
+    direction: ltr;
+}
+
+div.white-box {
+    direction: rtl;
+}
+
+div.page div.translation{
+    margin-bottom: 10px;
+}
+div.white-box div.translation{
+    margin-bottom: 20px;
 }
 
 .button {

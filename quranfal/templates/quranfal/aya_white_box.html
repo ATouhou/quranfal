@@ -1,0 +1,16 @@
+<div class="white-box">
+    {% if show_bismillah and aya.bismillah %}
+        <hr>
+        <p align="center">
+            {{ aya.bismillah }}
+        </p>
+    {% endif %}
+
+    <span class="key">
+        <a href="{{ aya.get_absolute_url }}" class="blank_link">
+        {{ aya.key }}
+        </a>
+    </span>
+
+    {% include 'quranfal/aya_span.html' with aya=aya %}
+</div>

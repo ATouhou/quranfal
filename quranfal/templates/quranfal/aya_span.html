@@ -1,0 +1,15 @@
+<span class="aya_wrapper">
+
+    <span class="aya"
+          id="{{ aya.aya_id }}"
+          data-sura="{{ aya.sura.number }}"
+          data-aya="{{ aya.number }}"
+{#          data-learning="{{ aya.userayas.all.0.list_id }}"#}
+          data-href="{{ aya.get_absolute_url }}"
+          data-translation="&lrm;{{aya.translations.all.0.text}}&lrm;"
+    >
+        {{ aya.text }}
+    </span>
+
+    {{ aya.word_meanings_json|safe }}
+</span>

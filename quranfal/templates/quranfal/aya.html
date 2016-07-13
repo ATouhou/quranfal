@@ -1,0 +1,9 @@
+{% extends 'quranfal/base.html' %}
+
+{% block body %}
+    <div class="aya_group
+            {{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
+        {% include "quranfal/aya_white_box.html" with aya=aya %}
+        {% include "quranfal/page_script.html" with aya=aya %}
+    </div>
+{% endblock %}

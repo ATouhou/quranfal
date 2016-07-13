@@ -1,0 +1,11 @@
+{% extends 'quranfal/base.html' %}
+
+{% block body %}
+<ul>
+    {% for aya in ayas %}
+        {% include "quranfal/aya_white_box.html" with aya=aya show_bismillah=True %}
+    {% endfor %}
+    {% include "quranfal/aya_script.html" %}
+</ul>
+{% endblock %}
+

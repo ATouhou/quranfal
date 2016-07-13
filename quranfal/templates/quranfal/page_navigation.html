@@ -1,0 +1,31 @@
+<div class="page_controls">
+
+    <div class="input-group">
+          <span class="input-group-btn">
+            <a class="btn btn-default" href="/quran/page/{{page_number|add:'1'}}/" type="button" title="Next Page">
+                <span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span>
+            </a>
+          </span>
+        <input type="text" class="form-control page_number" placeholder="Page #" value="{{page_number}}">
+        {% if page_number > 1 %}
+        <span class="input-group-btn">
+            <a class="btn btn-default" href="/quran/page/{{page_number|add:'-1'}}/" type="button" title="Previous Page">
+                <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+            </a>
+          </span>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    $('input.page_number').on('keyup', function(event){
+        if (event.keyCode == 13){
+            window.location = '/quran/page/' + $('input.page_number').prop('value') + '/'
+        }
+    })
+    $('input.page_number').on('blur', function(){
+        if ($('input.page_number').prop('value') != $('input.page_number').attr('value')) // if changed
+            window.location = '/quran/page/' + $('input.page_number').prop('value') + '/'
+    })
+</script>

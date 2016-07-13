@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView
 
-from quranfal.views import LearningPageView, LearningMarkAya, LearningMarkWord, settings, saved, frequent
+from quranfal.views import *
 
 
 urlpatterns = [
@@ -28,7 +28,7 @@ urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
 
-    url(r'^quran/page/(?P<page_number>\d+)/$', LearningPageView.as_view(), name='quran_page'),
+    url(r'^quran/page/(?P<page_number>\d+)/$', PageView.as_view(), name='quran_page'),
     url(r'^quran/learning/aya/$', login_required(LearningMarkAya.as_view()), name='learning_mark_aya'),
     url(r'^quran/learning/word/$', login_required(LearningMarkWord.as_view()), name='learning_mark_word'),
 
@@ -37,7 +37,14 @@ urlpatterns = [
     url(r'^quran/study/saved/$', login_required(saved), name='learning_mark_word'),
     url(r'^quran/study/frequent/$', login_required(frequent), name='learning_mark_word'),
 
-    url(r'^quran/', include('quran.urls')),
+    url(r'^quran/$', IndexView.as_view(), name='quran_index'),
+    url(r'^quran/(?P<sura_number>\d+)/$', SuraView.as_view(), name='quran_sura'),
+    url(r'^quran/(?P<sura_number>\d+)/(?P<aya_number>\d+)/$', AyaView.as_view(), name='quran_aya'),
+    url(r'^quran/(?P<sura_number>\d+)/(?P<aya_number>\d+)/(?P<word_number>\d+)/$', WordView.as_view(), name='quran_word'),
+
+    url(r'^quran/lemma/(?P<lemma_id>\d+)/$', LemmaView.as_view(), name='quran_lemma'),
+    url(r'^quran/root/(?P<root_id>\d+)/$', RootView.as_view(), name='quran_root'),
+    url(r'^quran/root/$', RootIndexView.as_view(), name='quran_root_index'),
 
 
     url(r'^', RedirectView.as_view(url='/quran/page/0/')),

@@ -1,0 +1,20 @@
+{% extends 'quranfal/base.html' %}
+{% block body %}
+
+    <div class="dark-box header">
+        Lemma: <span class="highlighted_word">{{ lemma.text }}</span>
+
+        {% if lemma.root %}
+            | Root:
+            <a href="{{ lemma.root.get_absolute_url }}" target="_blank" class="blank_link">{{ lemma.root.utext }}</a>
+        {% endif %}
+    </div>
+
+    <div class="aya_group {{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
+        {% for word in words %}
+            {% include "quranfal/aya_white_box.html" with aya=word.aya %}
+            <script>words_to_highlight_in_aya['{{word.aya.aya_id}}'] = ["{{word.utext}}"]</script>
+        {% endfor %}
+        {% include "quranfal/page_script.html" %}
+    </div>
+{% endblock %}

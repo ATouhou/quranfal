@@ -1,0 +1,63 @@
+{% extends 'quranfal/base.html' %}
+{% block body %}
+
+    <div class="dark-box header">
+        Word: <span class="highlighted_word">{{ word.utext }}</span>
+
+        {% if word.lemma %}
+            | Lemma:
+            <a href="{{ word.lemma.get_absolute_url }}" class="blank_link" target="_blank">
+                {{ word.lemma.utext }}
+            </a>
+        {% endif %}
+
+        {% if word.lemma.root %}
+            | Root:
+            <a href="{{ word.lemma.root.get_absolute_url }}" class="blank_link" target="_blank">
+                {{ word.lemma.root.utext }}
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="grammar-box">
+        {% for segment in word.segments.all %}
+            <span class="highlighted_word">{{ segment.utext }}</span>
+
+            {% if segment.pos %} | {{ segment.pos }} {% endif %}
+            {% if segment.mood %} | MOOD: {{ segment.mood }} {% endif %}
+            {% if segment.case %} | CASE: {{ segment.case }} {% endif %}
+            {% if segment.form %} | FORM: {{ segment.form }} {% endif %}
+            {% if segment.gender %} | GENDER: {{ segment.gender }} {% endif %}
+            {% if segment.definite %} | DEFINITE: {{ segment.definite }} {% endif %}
+            {% if segment.tense %} | TENSE: {{ segment.tense }} {% endif %}
+            {% if segment.participle %} | PARTICIPLE: {{ segment.participle }} {% endif %}
+            {% if segment.special %} | SP: {{ segment.special }} {% endif %}
+            {% if segment.other %} | OTHER: {{ segment.other }} {% endif %}
+            <br>
+        {% endfor %}
+    </div>
+
+    <div class="aya_group {{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
+        {% include "quranfal/aya_white_box.html" with aya=aya %}
+    </div>
+
+    {% if ayas.count > 1 %}
+        <div class="light-box header">
+            Word <span class="highlighted_word">{{ word.utext }}</span> in other verses:
+        </div>
+    {% else %}
+        No other verses with word {{ word.utext }}
+    {% endif %}
+
+    <div class="aya_group {{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
+        {% for ay in ayas %}
+            {% if ay.key != aya.key %}
+                {% include "quranfal/aya_white_box.html" with aya=ay %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <script>words_to_highlight_in_page.push("{{word.utext}}")</script>
+    {% include "quranfal/page_script.html" %}
+
+{% endblock %}

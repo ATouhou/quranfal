@@ -10,26 +10,6 @@
     <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Droid+Serif" rel="stylesheet" type="text/css">
     {% load quran %}
 
-    {% if can_mark_known_words %}
-        <script> var user_words = {{ user_words | safe }}</script>
-    {% else %}
-        <script> var user_words = []</script>
-    {% endif %}
-
-    <div class="page_container">
-
-        <div class="login_notification">
-            <a href="#0" class="cd-btn">settings</a>
-            {% if not_logged_in %}
-                | You can <a href="/accounts/login/">login</a> to mark words as known or add to your study list
-            {% else %}
-                | <a href="/accounts/logout/">log out</a>
-                {% if can_mark_unknown_words %}
-                | <a href="/quran/study/saved/" class="fancybox fancybox.ajax">words saved</a>
-                {% endif %}
-            {% endif %}
-        </div>
-
         <div class="wire_frame">
             <div class="outer_frame">
                 <div class="wire_frame">
@@ -37,9 +17,8 @@
                         <div class="wire_frame" style="padding: 3px;">
                             <div class="page wire_frame" style="padding: 10px;">
 
-                                <div class="aya_group{{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
+                                <div class="aya_group {{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
                                     {% for aya in ayas %}
-
                                         {% if aya.bismillah %}
                                             <div class="sura-header">سورة {{ aya.sura.text }}</div>
                                             <div class="bismillah">
@@ -47,21 +26,7 @@
                                             </div>
                                         {% endif %}
 
-                                        <span class="aya_wrapper">
-
-                                        <span class="aya"
-                                              id="{{ aya.aya_id }}"
-                                              data-sura="{{ aya.sura.number }}"
-                                              data-aya="{{ aya.number }}"
-                                              data-learning="{{ aya.userayas.all.0.list_id }}"
-                                              data-href="{{ aya.get_absolute_url }}"
-                                              data-translation="&lrm;{{aya.translations.all.0.text}}&lrm;"
-                                              >
-                                            {{ aya.text }}
-                                        </span>
-
-                                        {{ aya.word_meanings_json|safe }}
-                                    </span>
+                                        {% include 'quranfal/aya_span.html' with aya=aya %}
                                     {% endfor %}
                                 </div>
 
@@ -72,8 +37,7 @@
             </div>
         </div>
 
-        {% include 'quran/page_navigation.html' %}
-    </div>
+        {% include 'quranfal/page_navigation.html' %}
 
 
     {% include "quranfal/page_script.html" %}

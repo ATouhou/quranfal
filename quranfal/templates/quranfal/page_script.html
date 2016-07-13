@@ -1,4 +1,3 @@
-
 {% load static %}
 <script src="{% static 'quranfal.js' %}"></script>
 
@@ -8,16 +7,16 @@
     var aya_groups = $('div.aya_group')
     aya_groups.toArray().forEach(function (group) {
         var group_jq = $(group)
+        var show_translation = group_jq.hasClass('show-translation')
+        var show_word_meanings = group_jq.hasClass('show-word-meanings')
         var can_mark_known_words = group_jq.hasClass('can-mark-known-words')
         var can_mark_unknown_words = group_jq.hasClass('can-mark-unknown-words')
-        var show_word_meanings = group_jq.hasClass('show-word-meanings')
-        var show_translation = group_jq.hasClass('show-translation')
 
-        var ayas = group_jq.children('.aya_wrapper').children('.aya')
+        var ayas = group_jq.find('span.aya')
 
-        ayas.toArray().forEach(function(aya){
-                var words_to_highlight = (words_to_highlight_in_aya[aya.id] || []).concat(words_to_highlight_in_page)
-                convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight)
+        ayas.toArray().forEach(function (aya) {
+            var words_to_highlight = (words_to_highlight_in_aya[aya.id] || []).concat(words_to_highlight_in_page)
+            convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight)
         })
     })
 
