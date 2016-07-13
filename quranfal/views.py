@@ -22,7 +22,7 @@ class UserView:
             .values_list('aya__sura_id', 'aya__number', 'number', 'distinct_word__user_words__list_id')
         self.user_words = self.user_words + [list(word) for word in extra_words]
 
-    def get_known_user_as_json(self):
+    def get_user_words_as_json(self):
         return json.dumps(self.user_words)
 
     def get_user_context(self):
@@ -80,7 +80,7 @@ class PageView(TemplateView, UserView):
                 .prefetch_related(prefetch_aya_translations(self.request))
 
         context['ayas'] = ayas
-        context['user_words'] = self.get_known_user_as_json()
+        context['user_words'] = self.get_user_words_as_json()
         context['page_number'] = int(page_number)
         return context
 
@@ -246,14 +246,24 @@ def prefetch_aya_translations(request):
 
 
 class AyaView(TemplateView, UserView):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        UserView.__init__(self)
+
     template_name='quranfal/aya.html'
     def get_context_data(self, sura_number, aya_number, **kwargs):
         context = super(AyaView, self).get_context_data(**kwargs)
-        user_context = super(PageView, self).get_user_context()
+        user_context = super(AyaView, self).get_user_context()
         context = dict(list(context.items()) + list(user_context.items()))
 
         aya = Aya.objects.filter(sura__number=sura_number, number=aya_number)\
             .prefetch_related(prefetch_aya_translations(self.request))
+
+        if context['can_mark_known_words'] or context['can_mark_unknown_words']:
+            self.add_to_user_words(aya)
+
+        context['user_words'] = self.get_user_words_as_json()
         context['aya'] = aya[0]
 
         return context
@@ -285,7 +295,7 @@ class WordView(TemplateView, UserView):
         context['word'] = word[0]
         context['aya'] = aya[0]
         context['ayas'] = ayas
-        context['user_words'] = self.get_known_user_as_json()
+        context['user_words'] = self.get_user_words_as_json()
 
         return context
 
@@ -309,9 +319,10 @@ class LemmaView(TemplateView, UserView):
             .prefetch_related('aya') \
             .prefetch_related(Prefetch('aya__translations', queryset=aya_translation_queryset))
 
-        # if context['can_mark_known_words'] or context['can_mark_unknown_words']:
-        #     self.add_to_user_words(ayas)
-        # context['user_words'] = self.get_known_user_as_json()
+        if context['can_mark_known_words'] or context['can_mark_unknown_words']:
+            ayas = [word.aya.id for word in words]
+            self.add_to_user_words(ayas)
+        context['user_words'] = self.get_user_words_as_json()
 
         context['lemma'] = lemma
         context['words'] = words
@@ -320,6 +331,11 @@ class LemmaView(TemplateView, UserView):
 
 
 class RootView(TemplateView, UserView):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        UserView.__init__(self)
+
     template_name='quranfal/root.html'
     def get_context_data(self, root_id, **kwargs):
         context = super(RootView, self).get_context_data(**kwargs)
@@ -328,8 +344,16 @@ class RootView(TemplateView, UserView):
 
         lemmas = Lemma.objects.filter(root__id=root_id)\
             .prefetch_related('words__aya')\
-            .prefetch_related(Prefetch('words__aya__translations', queryset=AyaTranslation.objects.filter(translation_id=get_setting(self.request, 'show_translation'))))
+            .prefetch_related(Prefetch('words__aya__translations', queryset=AyaTranslation.objects.filter(translation_id=get_setting(self.request, 'translation_type'))))
         context['lemmas'] = lemmas  # , 'ayas': ayas
+
+        if context['can_mark_known_words'] or context['can_mark_unknown_words']:
+            ayas=[]
+            for lemma in lemmas:
+                for word in lemma.words.all():
+                   ayas = ayas + [word.aya_id]
+            self.add_to_user_words(ayas)
+        context['user_words'] = self.get_user_words_as_json()
 
         return context
 
