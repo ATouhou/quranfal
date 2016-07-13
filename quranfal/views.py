@@ -183,7 +183,7 @@ def settings(request):
     if request.method == 'POST':
         form = SettingsForm(request.POST)
         if form.is_valid():
-            response = HttpResponseRedirect('/quran/page/0/')
+            response = HttpResponse('<script>location.reload();</script>', content_type='text/html')
             response.set_cookie('translation_type', form.cleaned_data['translation_type'])
             response.set_cookie('show_translation', form.cleaned_data['show_translation'])
             response.set_cookie('show_word_meanings', form.cleaned_data['show_word_meanings'])

@@ -1,6 +1,9 @@
-{% load bootstrap3 %}
+{% load static %}
+<script src="{% static 'jquery/jquery-2.2.4.js' %}"></script>
+<script src="{% static 'quranfal.js' %}"></script>
 
-<form action="/quran/settings/" method="post">
+{% load bootstrap3 %}
+<form action="/quran/settings/" ajax-submit method="post">
     {% csrf_token %}
     {% bootstrap_form form %}
 
@@ -16,11 +19,34 @@
     {% endif %}
     <input type="submit" value="Submit"/>
     <br><br>
-    Note: If "Show word meanings" option is not selected, word meanings can still be seen on-demand by hovering mouse over the word.
-    However, since hovering is not available on touch devices, this option might be manually enabled even if not suggested for the level.
+    Note: If "Show word meanings" option is not selected, word meanings can still be seen on-demand by hovering mouse
+    over the word.
+    However, since hovering is not available on touch devices, this option might be manually enabled even if not
+    suggested for the level.
 </form>
 
+<div id="formUpdate"></div>
+
 <script>
+
+    {% if request.is_ajax %}
+        var frm = $('form[ajax-submit]')
+        frm.submit(function (ev) {
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (data) {
+                    $('div#formUpdate').replaceWith(data);
+                },
+                error: function (data) {
+                    alert(data);
+                    console.log(data);
+                },
+            });
+            ev.preventDefault();
+        });
+    {% endif %}
 
     $(document).ready(function () {
         $('a#beginner').on('click', function () {
