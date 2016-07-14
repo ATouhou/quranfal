@@ -16,7 +16,7 @@
 
         ayas.toArray().forEach(function (aya) {
             var words_to_highlight = (words_to_highlight_in_aya[aya.id] || []).concat(words_to_highlight_in_page)
-            convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight)
+            convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight, word_meanings)
         })
     })
 

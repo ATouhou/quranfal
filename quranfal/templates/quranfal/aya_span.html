@@ -1,8 +1,8 @@
 <span class="aya_wrapper">
 
     <span class="aya"
-          id="{{ aya.aya_id }}"
-          data-sura="{{ aya.sura.number }}"
+          id="{{ aya.html_id }}"
+          data-sura="{{ aya.sura_id }}"
           data-aya="{{ aya.number }}"
 {#          data-learning="{{ aya.userayas.all.0.list_id }}"#}
           data-href="{{ aya.get_absolute_url }}"
@@ -11,5 +11,7 @@
         {{ aya.text }}
     </span>
 
-    {{ aya.word_meanings_json|safe }}
+    <script>
+        word_meanings["{{ aya.html_id }}"] = {{ aya.word_meanings_json|safe }}
+    </script>
 </span>

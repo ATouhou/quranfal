@@ -1,4 +1,5 @@
 import json
+
 from django.db.models import Prefetch, Sum, Min
 from django import forms
 from django.db.models.functions import Coalesce
@@ -70,14 +71,16 @@ class PageView(TemplateView, UserView):
             # user_aya_qs = UserAya.objects.filter(user=user).select_related('list')
             ayas = Aya.objects.filter(id__gte=page.aya_begin_id, id__lte=page.aya_end_id) \
                 .prefetch_related(
-                prefetch_aya_translations(self.request))  # filtering on membership table so prefetch membership table!
+                prefetch_aya_translations(self.request), 'word_meanings')  # filtering on membership table so prefetch membership table!
             # later: , Prefetch('user_ayas', queryset=user_aya_qs)
 
             if context['can_mark_known_words'] or context['can_mark_unknown_words']:
                 self.add_to_user_words(ayas)
         else:
             ayas = Aya.objects.filter(id__gte=page.aya_begin_id, id__lte=page.aya_end_id) \
-                .prefetch_related(prefetch_aya_translations(self.request))
+                .prefetch_related(prefetch_aya_translations(self.request), 'word_meanings')
+
+        add_word_meanings_json(ayas)
 
         context['ayas'] = ayas
         context['user_words'] = self.get_user_words_as_json()
@@ -258,7 +261,9 @@ class AyaView(TemplateView, UserView):
         context = dict(list(context.items()) + list(user_context.items()))
 
         aya = Aya.objects.filter(sura__number=sura_number, number=aya_number)\
-            .prefetch_related(prefetch_aya_translations(self.request))
+            .prefetch_related(prefetch_aya_translations(self.request), 'word_meanings')
+
+        add_word_meanings_json(aya)
 
         if context['can_mark_known_words'] or context['can_mark_unknown_words']:
             self.add_to_user_words(aya)
@@ -267,6 +272,14 @@ class AyaView(TemplateView, UserView):
         context['aya'] = aya[0]
 
         return context
+
+
+# make sure to add .prefetch_related('word_meanings') beforehand
+def add_word_meanings_json(aya):
+    for aya_ in aya:
+        meanings = sorted(aya_.word_meanings.all(), key=lambda x: x.number)
+        meanings = [meaning.ttext for meaning in meanings]
+        aya_.word_meanings_json = '["' + '", "'.join(meanings) + '"]'
 
 
 class WordView(TemplateView, UserView):
@@ -282,20 +295,29 @@ class WordView(TemplateView, UserView):
         context = dict(list(context.items()) + list(user_context.items()))
 
         aya = Aya.objects.filter(sura__number=sura_number, number=aya_number) \
-            .prefetch_related(prefetch_aya_translations(self.request))
+            .prefetch_related(prefetch_aya_translations(self.request), 'word_meanings')
+
+        add_word_meanings_json (aya)
+        aya = aya[0]
+
         word = Word.objects.filter(aya=aya, number=word_number).prefetch_related()  # todo cant see extent of data brought
-        ayas = Aya.objects.filter(words__distinct_word=word[0].distinct_word) \
+        the_word = word[0] # one less trip to db
+
+        # other ayas with same word
+        ayas = Aya.objects.filter(words__distinct_word=the_word.distinct_word) \
             .order_by('sura_id', 'number') \
-            .prefetch_related(prefetch_aya_translations(self.request))  # other ayas with same word
+            .prefetch_related(prefetch_aya_translations(self.request), 'word_meanings')
+        # prefetch does not like flat values so cant put values_list here
 
+        add_word_meanings_json (ayas)
+
+        # pull user words from the db
         if context['can_mark_known_words'] or context['can_mark_unknown_words']:
-            self.add_to_user_words(ayas)
-            self.add_to_user_words(aya)
+            self.add_to_user_words([aya_.id for aya_ in ayas] + [aya.id]) # one less trip to the db by combining the two
 
-        context['word'] = word[0]
-        context['aya'] = aya[0]
+        context['word'] = the_word
+        context['aya'] = aya
         context['ayas'] = ayas
-        context['user_words'] = self.get_user_words_as_json()
 
         return context
 
@@ -316,13 +338,15 @@ class LemmaView(TemplateView, UserView):
         aya_translation_queryset = AyaTranslation.objects.filter(translation_id=get_setting(self.request, 'translation_type'))
         words = lemma.words.all() \
             .order_by('sura_id', 'aya_id') \
-            .prefetch_related('aya') \
-            .prefetch_related(Prefetch('aya__translations', queryset=aya_translation_queryset))
+            .prefetch_related(Prefetch('aya__translations', queryset=aya_translation_queryset)) \
+            .prefetch_related('aya__word_meanings')
 
         if context['can_mark_known_words'] or context['can_mark_unknown_words']:
-            ayas = [word.aya.id for word in words]
+            ayas = [word.aya for word in words]
             self.add_to_user_words(ayas)
         context['user_words'] = self.get_user_words_as_json()
+
+        add_word_meanings_json(ayas)
 
         context['lemma'] = lemma
         context['words'] = words
@@ -342,22 +366,23 @@ class RootView(TemplateView, UserView):
         user_context = super(RootView, self).get_user_context()
         context = dict(list(context.items()) + list(user_context.items()))
 
+        # .prefetch_related('words__aya') \
         lemmas = Lemma.objects.filter(root__id=root_id)\
-            .prefetch_related('words__aya')\
-            .prefetch_related(Prefetch('words__aya__translations', queryset=AyaTranslation.objects.filter(translation_id=get_setting(self.request, 'translation_type'))))
+            .prefetch_related(Prefetch('words__aya__translations', queryset=AyaTranslation.objects.filter(translation_id=get_setting(self.request, 'translation_type')))) \
+            .prefetch_related('words__aya__word_meanings')
         context['lemmas'] = lemmas  # , 'ayas': ayas
 
+        ayas=[]
+        for lemma in lemmas:
+            for word in lemma.words.all():
+               ayas = ayas + [word.aya]
+
         if context['can_mark_known_words'] or context['can_mark_unknown_words']:
-            ayas=[]
-            for lemma in lemmas:
-                for word in lemma.words.all():
-                   ayas = ayas + [word.aya_id]
             self.add_to_user_words(ayas)
-        context['user_words'] = self.get_user_words_as_json()
+            context['user_words'] = self.get_user_words_as_json()
 
+        add_word_meanings_json(ayas)
         return context
-
-
 
 
 

@@ -2,7 +2,7 @@
  * Created by mehmet on 6/26/2016.
  */
 
-function convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight) {
+function convert_aya_to_words(aya, show_translation, show_word_meanings, can_mark_known_words, can_mark_unknown_words, words_to_highlight, word_meanings) {
     var meanings = word_meanings[aya.id]
     var sura_number = aya.attributes['data-sura'].value
     var aya_number = aya.attributes['data-aya'].value

@@ -13,7 +13,8 @@
 
         <div class="aya_group
                 {{ can_mark_known_words|yesno:" can-mark-known-words," }}{{ can_mark_unknown_words|yesno:" can-mark-unknown-words," }}{{ show_word_meanings|yesno:" show-word-meanings," }}{{ show_translation|yesno:" show-translation," }}">
-            {% for word in lemma.words.all.distinct|dictsort:"sura_id"|dictsort:"aya_id" %}
+            {% for word in lemma.words.all %}
+{#                .distinct|dictsort:"sura_id"|dictsort:"aya_id" causes not using prefetch related thus wrong translation#}
                 {% include 'quranfal/aya_white_box.html' with aya=word.aya %}
                 <script>words_to_highlight_in_aya['{{word.aya.aya_id}}'] = ["{{word.utext}}"]</script>
             {% endfor %}
