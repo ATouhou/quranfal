@@ -24,7 +24,9 @@ class UserView:
         self.user_words = self.user_words + [list(word) for word in extra_words]
 
     def get_user_words_as_json(self):
-        return json.dumps(self.user_words)
+        if self.user_words.__len__() > 0:
+            return json.dumps(self.user_words)
+        return 'Null'
 
     def get_user_context(self):
         extra_context = {}
@@ -298,7 +300,6 @@ class WordView(TemplateView, UserView):
             .prefetch_related(prefetch_aya_translations(self.request), 'word_meanings')
 
         add_word_meanings_json (aya)
-        aya = aya[0]
 
         word = Word.objects.filter(aya=aya, number=word_number).prefetch_related()  # todo cant see extent of data brought
         the_word = word[0] # one less trip to db
@@ -313,10 +314,12 @@ class WordView(TemplateView, UserView):
 
         # pull user words from the db
         if context['can_mark_known_words'] or context['can_mark_unknown_words']:
-            self.add_to_user_words([aya_.id for aya_ in ayas] + [aya.id]) # one less trip to the db by combining the two
+            self.add_to_user_words(ayas)
+            self.add_to_user_words(aya)
+            context['user_words'] = self.get_user_words_as_json()
 
         context['word'] = the_word
-        context['aya'] = aya
+        context['aya'] = aya[0]
         context['ayas'] = ayas
 
         return context
@@ -344,7 +347,7 @@ class LemmaView(TemplateView, UserView):
         if context['can_mark_known_words'] or context['can_mark_unknown_words']:
             ayas = [word.aya for word in words]
             self.add_to_user_words(ayas)
-        context['user_words'] = self.get_user_words_as_json()
+            context['user_words'] = self.get_user_words_as_json()
 
         add_word_meanings_json(ayas)
 
