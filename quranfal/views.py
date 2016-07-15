@@ -156,7 +156,7 @@ class LearningMarkWord(View):
             user_word = UserWord(user=request.user, distinct_word=word.distinct_word, list_id=list_id)
 
         if deleted:  # not deleted
-            msg = 'Word %s is deleted.\n There are %d words in the %s (%.2f%% of the Quran).' % (
+            msg = 'Word %s is deleted.<br> %d words in your %s <br>(%.2f%% of the Quran).' % (
             word.utext, old_stats['distinct_word_count'], list_name, old_stats['word_count'] / TOTAL_WORD_COUNT * 100)
         else:
             new_stats = self.get_list_stats(list_id)
@@ -165,7 +165,7 @@ class LearningMarkWord(View):
 
             user_word.save()
 
-            msg = 'Word %s is %d times in Quran!\nThere are %d words in the %s (%.2f%% of the Quran).' % \
+            msg = 'Word %s is %d times in Quran!<br>%d words in your %s <br>(%.2f%% of the Quran).' % \
                   (word.utext, word.distinct_word.count, new_stats['distinct_word_count'], list_name,
                    new_stats['word_count'] / TOTAL_WORD_COUNT * 100)
 
